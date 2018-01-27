@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js ",
-    "dev": "gulp | nodemon index.js "
+    "dev": "start http://localhost:3000/public/ | browser-sync start --no-open --server --files './css/**/*.css, ./js/**/*.js'",
+    "sv": "start http://localhost:3000/public/ | nodemon index.js | browser-sync start --no-open --server --files './css/**/*.css, ./js/**/*.js' --plugins C:\\Users\\Home\\AppData\\Roaming\\npm\\node_modules\\bs-html-injector?files[]=*.html"
   },
   "repository": {
     "type": "git",
@@ -20,9 +21,5 @@
   "dependencies": {
     "express": "^4.16.2",
     "socket.io": "^2.0.4"
-  },
-  "devDependencies": {
-    "browser-sync": "^2.23.6",
-    "gulp": "^3.9.1"
   }
 }
