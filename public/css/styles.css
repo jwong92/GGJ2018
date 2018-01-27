@@ -1,5 +1,24 @@
 canvas{
-    background-color: #FFF555;
+    background: linear-gradient(45deg, #000000 ,#202D3F, #392C57, #36688B, #202D3F, #000000);
     display: block;
     margin: 0 auto;
 }
+
+img {
+  width: 1em;
+}
+
+[class^="star"] {
+  position: absolute;
+  font-size: 4em;
+}
+
+/* Position of stars */
+/* .star-1 {
+  top: calc(50% + 10px);
+  left: calc(50% + 10px);
+}
+
+.star-2 {
+
+} */
