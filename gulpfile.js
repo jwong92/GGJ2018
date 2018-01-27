@@ -4,7 +4,7 @@ var bs = require('browser-sync').create();
 gulp.task('browser-sync', function() {
 	bs.init({
 		proxy: {
-			target: "localhost:5000",
+			target: "localhost:80",
 			ws: true // enables websockets
 		}
 	});
