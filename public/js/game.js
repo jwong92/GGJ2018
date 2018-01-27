@@ -45,12 +45,20 @@
 
 
 			// Check if cell is empty && (if we have the inventory OR the money)
-			if (!this.objectOverlaps(sat) && this.current_user.amount > this.Map.satellite_price) {
+			if (!this.objectOverlaps(sat) && (this.current_user.amount > this.Map.satellite_price || this.current_user.sat > 0)) {
 				this.current_user.satellites.push(sat);
-				this.Map.satellite_price *= 1.2;
+				if(this.current_user.sat > 0){
+					this.current_user.sat --;
+				}
+				else {
+					this.current_user.amount -= this.Map.satellite_price;
+					this.Map.satellite_price = Math.floor(this.Map.satellite_price * 1.2);
+				}
 
-				this.current_user.amount -= this.Map.satellite_price;
 
+
+
+				this.updateHud();
 			}
 			else {
 				//show something that we dont have money
@@ -112,11 +120,19 @@
 
 		update_money() {
 			this.current_user.amount += this.current_user.rate;
+			this.updateHud()
 		}
 
 		runGame() {
 			requestAnimationFrame(this.runGame.bind(this))
 			this.drawGalaxy()
+			this.updateHud()
+		}
+		updateHud() {
+			$("#money").html(this.current_user.amount)
+			$(".inv.sat span").html(this.current_user.sat)
+			$(".costs.sat span").html(Map.satellite_price)
+
 		}
 
 	}
