@@ -1,7 +1,6 @@
 //variables we need to define
 var PlayerPlanetAmount = 10;
-var images = [["img/planets/planet1.svg"], ["img/planets/planet2.svg", "img/planets/planet3.svg","img/planets/planet4.svg",
-"img/planets/planet5.svg", "img/planets/planet6.svg","img/planets/planet7.svg"],["img/stars/favicon.png"]];
+var images = [[0,0], [1,6],[7,7]];
 var StartingSatelites = 3;
 var SatelitesRange = 10;
 var asteroidsSize = 3;
@@ -36,9 +35,8 @@ function createRandomMap(width, height, players, planets, asteroids)
 			var size = Math.floor(Math.random() * (sizeRange[1] - sizeRange[0]) + sizeRange[0]);
 			//call for a new random position
 			var xy = getNextXY(objects, size);
-			var path1 = images[i][Math.floor(Math.random()*images[i].length)];
-			console.log(path1);
-			var img = new Image(path1);
+			var img = Math.floor(Math.random() * (images[i][1] - images[i][0]) + images[i][0]);;
+			console.log(img);
 			//create objects depending of the current index of element type;
 			if(i == 0){
 				objects[i].push(new Players(xy[0], xy[1], PlayerPlanetAmount, StartingSatelites, img));
