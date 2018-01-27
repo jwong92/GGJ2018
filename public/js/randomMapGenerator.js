@@ -36,7 +36,7 @@ function createRandomMap(width, height, players, planets, asteroids)
 			var size = Math.floor(Math.random() * (sizeRange[1] - sizeRange[0]) + sizeRange[0]);
 			//call for a new random position
 			var xy = getNextXY(objects, size);
-			var img = images[Math.floor(Math.random()*images[i].length)];
+			var img = new Image(images[Math.floor(Math.random()*images[i].length)]);
 			//create objects depending of the current index of element type;
 			if(i == 0){
 				objects[i].push(new Players(xy[0], xy[1], PlayerPlanetAmount, StartingSatelites, img));
