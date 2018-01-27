@@ -15,6 +15,10 @@
   font-weight: bold;
 }
 
+.inv::before {
+  content: ""
+}
+
 #intro {
   font-family: "Londrina Solid", arial, sans-serif;
   font-weight: 400;

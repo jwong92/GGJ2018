@@ -1,10 +1,34 @@
 function socketEvents(io) {
+	const rooms=[]
 	io.on('connection', async function (socket) {
-		socket.emit('userInfo', ['test']);
-		socket.on('send_info',  function (message) {
+		socket.on('get_room',  function (callback) {
 			"use strict"
-			socket.broadcast.emit('resend_info', message);
+			let connected = false
+			let i = rooms.length
+			while(i--){
+				let room = rooms[i]
+				if(room.participants.length===1 &&!connected){
+					connected=true
+					room.participants.push(socket)
+					socket.join(room.id);
+					// io.sockets.in(room.id).emit('gameInfo', ['cool stuff']);
+					callback(['new map stuff'])
+				}
+				if(room.participants.length===0){
+					rooms.splice(i,1)
+				}
+			}
+
+			if(!connected){
+				let newRoom={id:rooms.length,participants:[socket]}
+				rooms.push(newRoom)
+				connected=true
+				socket.join(newRoom.id);
+				//generate map
+				callback(['new map stuff'])
+			}
 		})
+
 		// let params = socket.handshake.query;
 		// let name = validator.escape(params.name+"");
 		// let avatar = validator.escape(params.avatar+"");

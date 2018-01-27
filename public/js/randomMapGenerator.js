@@ -1,6 +1,6 @@
 //variables we need to define
 var PlayerPlanetAmount = 10;
-var images = [[0,0], [1,6],[7,7]];
+var images = [[0,0], [1,6],[8,8]];
 var StartingSatelites = 3;
 var SatelitesRange = 10;
 var asteroidsSize = 3;
@@ -14,7 +14,9 @@ var satPerPlanetRange = [2, 3];
 var width;
 var height;
 
-
+function generateRandomBetween(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) + min)
+}
 function createRandomMap(width, height, players, planets, asteroids)
 {
 	this.width = width;
@@ -35,19 +37,22 @@ function createRandomMap(width, height, players, planets, asteroids)
 			var size = Math.floor(Math.random() * (sizeRange[1] - sizeRange[0]) + sizeRange[0]);
 			//call for a new random position
 			var xy = getNextXY(objects, size);
-			var img = Math.floor(Math.random() * (images[i][1] - images[i][0]) + images[i][0]);;
-			console.log(img);
+			// var img = Math.floor(Math.random() * (images[i][1] - images[i][0]) + images[i][0]);
+			var img;
 			//create objects depending of the current index of element type;
 			if(i == 0){
+				img = "img/planets/planet1.svg";
 				objects[i].push(new Players(xy[0], xy[1], PlayerPlanetAmount, StartingSatelites, img));
 			}
 			else if(i == 1) {
 				//we create random atributes special for planets
+				img = "img/planets/planet"+generateRandomBetween(1,7)+".svg";
 				var amt = Math.floor(Math.random() * (planetAmtRange[1] - planetAmtRange[0]) + planetAmtRange[0]);
 				var satNum = Math.floor(Math.random() * (satPerPlanetRange[1] - satPerPlanetRange[0]) + satPerPlanetRange[0]);
 				objects[i].push(new Planets(xy[0], xy[1], amt, satNum, img));
 			}
 			else if(i == 2){
+				img = "img/stars/asteroid.svg";
 				objects[i].push(new AsteroidField(xy[0], xy[1], size, size, img));
 			}
 			//we add the size, since it's not in the constructor;
@@ -81,10 +86,10 @@ function overlap(objects, x, y, size){
 	//if we find 1 object, we return true for overlaping
 	for (var i = 0; i < objects.length; i++) {
 		for (var j = 0; j < objects[i].length; j++) {
-			console.log(objects[i][j], x, y, size, distance(objects[i][j], x, y), 
-				distance(objects[i][j], x, y) - minDistance - Math.ceil(size/2) - Math.ceil(objects[i][j].size/2),
-				"size: " + Math.ceil(size/2)
-				, "object: " + objects[i][j].size);
+			// console.log(objects[i][j], x, y, size, distance(objects[i][j], x, y),
+			// 	distance(objects[i][j], x, y) - minDistance - Math.ceil(size/2) - Math.ceil(objects[i][j].size/2),
+			// 	"size: " + Math.ceil(size/2)
+			// 	, "object: " + objects[i][j].size);
 			if(distance(objects[i][j], x, y) - minDistance - size/2 - objects[i][j].size/2 < 0){
 				return true;
 			}
