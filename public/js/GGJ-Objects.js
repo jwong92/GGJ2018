@@ -34,11 +34,14 @@ function AsteroidField(posX, posY, height, width, img,size) {
 }
 
 //Players
-function Players(posX, posY, amt, satNum, img) {
+function Players(posX, posY, amt, satNum, img,size) {
 	this.x = posX;
 	this.y = posY;
 	this.amount = amt;
   this.rate = startingRate;
 	this.sat = satNum;
 	this.img = img;
+	this.satellites=[]
+	this.planets=[]
+	this.size =size;
 }
