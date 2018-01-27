@@ -27,14 +27,18 @@ for (var i=0; i<homepagePlanets; i++) {
   $("#planets").append(planet);
 
   //Generate random positions of the canvas
-  var planPosX = Math.floor((Math.random() * 90) + 5);
+  var planPosX = Math.floor((Math.random() * 80) + 5);
   var planPosY = Math.floor((Math.random() * 72) + 23);
 
   //Place planets randomly on canvas
-  $(planet).css("top", planPosX + "%");
-  $(planet).css("left", planPosY + "%");
-  $(planet).css("fontSize", "5em");
-
+  $(planet).css({
+    "position": "absolute",
+    "top": planPosX + "%",
+    "left": planPosY + "%",
+    "fontSize": "5em",
+    "opacity": 0.2,
+    "z-index": -1
+  })
 }
 
 //Create Stars
@@ -56,8 +60,13 @@ for (var i=0; i<homepagePlanets; i++) {
     //randomly generate star position and assign
     let starPosX = Math.floor((Math.random() * 90) + 5);
     let starPosY = Math.floor((Math.random() * 90) + 5);
-    $(currStar).css("top", starPosX + "%");
-    $(currStar).css("left", starPosY + "%");
+    $(currStar).css({
+      "top": starPosX + "%",
+      "left": starPosY + "%",
+      "position": "absolute",
+      "z-index": -1,
+      "opacity": 0.5
+    })
 
     //Randomly generate star rotation and assign
     let starRot = Math.floor((Math.random() * 45) + 1);
@@ -66,16 +75,9 @@ for (var i=0; i<homepagePlanets; i++) {
 
 //Create Planets
 
-
-<<<<<<< HEAD
-  }
-
   //function for Hiding Splash Instructions on Start button click
   $("#start").click(function(){hideTarget(this.parentElement)});
   function hideTarget(target) {
     $(target).css("display", "none  ");
   }
-
-=======
->>>>>>> 59c75c6cf5afe3989c85db513cfc4a18039584f1
 })//End page load
