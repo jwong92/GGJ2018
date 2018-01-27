@@ -29,4 +29,11 @@ $(document).ready(function() {
     $(currStar).css("transform", "rotateZ(" + starRot + "deg)");
 
   }
+
+  //function for Hiding Splash Instructions on Start button click
+  $("#start").click(function(){hideTarget(this.parentElement)});
+  function hideTarget(target) {
+    $(target).css("display", "none  ");
+  }
+
 })//End page load

@@ -4,12 +4,19 @@
   font-family: "Londrina Solid", arial, sans-serif;
   font-weight: 400;
   text-align: center;
+  background-color: rgba(113, 23, 103, 0.74);
+  padding: 2em;
+  color: rgb(219, 219, 212);
+  /* width: 60%; */
+      background: linear-gradient(45deg, #000000 ,#202D3F, #392C57, #36688B, #202D3F, #000000);
+      position: relative;
+height: 100%;
 }
 
 #intro p {
   width: 90%;
   margin: 0 auto;
-  line-height: 1.2em;
+  line-height: 1.5em;
   font-size: 1.25em;
 }
 
@@ -27,16 +34,42 @@ h1 {
   margin: 2rem;
 }
 
-#start:active {
+#start:hover {
   color: rgb(205, 186, 43);
+}
+
+#start:active {
+  background-color: rgb(68, 34, 75);
   border: 0.25em solid rgb(149, 101, 159);
 }
+
+.asteroid {
+  display: inline-block;
+}
+
+.asteroid img {
+  width: 3.5em;
+  height: auto;
+  transition: all 0s linear;
+  animation: rotate 1000ms infinite linear;
+}
+
+@keyframes rotate {
+    0% {
+      transform: rotateZ(0deg);
+    }
+    100% {
+      transform: rotateZ(360deg);
+    }
+}
+
 canvas{
     background: linear-gradient(45deg, #000000 ,#202D3F, #392C57, #36688B, #202D3F, #000000);
     display: block;
     margin: 0 auto;
     width: 100%;
     height: 100vh;
+    z-index: -20;
 }
 
 body{
@@ -49,6 +82,10 @@ img {
 
 [class^="star"] {
   position: absolute;
+}
+
+#stars {
+    z-index: -10;
 }
 
 /* Position of stars */
