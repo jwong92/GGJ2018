@@ -1,21 +1,22 @@
 //Planets
-var Planets(posX, posY, amt, satNum, owner, img) {
-  x: posX,
-  y: posY,
-  currency: amt,
-  satellites: satNum,
-  photo: img
+function Planets(posX, posY, amt, satNum, img) {
+  this.x = posX;
+  this.y = posY;
+  this.amount = amt;
+  this.sat = satNum;
+  this.photo = img;
 }
+
 //Satellites
-var Satellites(posX, posY, range) {
-  x: posX,
-  y: posY,
-  area: range
+function Satellites(posX, posY, range) {
+  this.x = posX;
+  this.y = posY;
+  this.area = range;
 }
 //Asteroids
-var AsteroidField(posX, posY, height, width) {
-  x: posX,
-  y: posY,
-  h: height,
-  w: width
+function AsteroidField(posX, posY, height, width) {
+  this.x = posX;
+  this.y = posY;
+  this.h = height;
+  this.w = width;
 }
