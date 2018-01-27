@@ -4,7 +4,8 @@
   "description": "game about transmitting signals across the galaxy to conquer new planets",
   "main": "index.js",
   "scripts": {
-    "start": "gulp | nodemon index.js "
+    "start": "node index.js ",
+    "dev": "gulp | nodemon index.js "
   },
   "repository": {
     "type": "git",
