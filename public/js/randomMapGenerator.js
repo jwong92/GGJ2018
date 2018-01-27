@@ -44,8 +44,8 @@ function createRandomMap(width, height, players, planets, asteroids)
 			}
 			else if(i == 1) {
 				//we create random atributes special for planets
-				var amt = (Math.random() * (planetAmtRange[1] - planetAmtRange[0]) + planetAmtRange[0]);
-				var satNum = (Math.random() * (satPerPlanetRange[1] - satPerPlanetRange[0]) + satPerPlanetRange[0]);
+				var amt = Math.floor(Math.random() * (planetAmtRange[1] - planetAmtRange[0]) + planetAmtRange[0]);
+				var satNum = Math.floor(Math.random() * (satPerPlanetRange[1] - satPerPlanetRange[0]) + satPerPlanetRange[0]);
 				objects[i].push(new Planets(xy[0], xy[1], amt, satNum, planetImage));
 			}
 			else if(i == 2){
