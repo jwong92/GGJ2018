@@ -1,9 +1,8 @@
 $(document).ready(function() {
 
-  //randomly generate stars
   var numStars = 10;
-  var counter = 15;
 
+//Create Stars
   for (var i=0; i<=numStars; i++) {
     let star = $("<img src='img/stars/4pt-star.svg'>").attr({
       class: "star-" + i
@@ -11,24 +10,23 @@ $(document).ready(function() {
     $("#stars").append(star);
   }
 
-  for (var i=1; i<=numStars; i+=2) {
-    var currStar = ".star-" + i;
-    $(currStar).css("fontSize", "5em");
-  }
-
-  for (var i=1; i<=numStars; i+=2){
-    counter += 150;
+//Chage the size of the star
+  for (var i=0; i<=numStars; i++) {
     let currStar = ".star-" + i;
-    $(currStar).css("top", "calc(10% + " + counter + "px)");
-    $(currStar).css("left", "calc(10% + " + counter + "px)");
+
+    //Randomly generate size of star and assign
+    let randomSize = Math.round((Math.random() * 2.5), 2);
+    $(currStar).css("fontSize", randomSize + "em");
+
+    //randomly generate star position and assign
+    let starPosX = Math.floor((Math.random() * 90) + 5);
+    let starPosY = Math.floor((Math.random() * 90) + 5);
+    $(currStar).css("top", starPosX + "%");
+    $(currStar).css("left", starPosY + "%");
+
+    //Randomly generate star rotation and assign
+    let starRot = Math.floor((Math.random() * 45) + 1);
+    $(currStar).css("transform", "rotateZ(" + starRot + "deg)");
+
   }
-
-  for (var i=0; i<=numStars; i+=2){
-    counter += 50;
-    let currStar = ".star-" + i;
-    $(currStar).css("top", "calc(5% + " + counter + "px)");
-    $(currStar).css("left", "calc(10% + " + counter + "px)");
-  }
-
-
 })//End page load

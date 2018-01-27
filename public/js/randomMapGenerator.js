@@ -5,7 +5,7 @@ var StartingSatelites = 3;
 var SatelitesRange = 10;
 var asteroidsSize = 3;
 // sizes ranges for players, planets and android fields
-var sizes = [[10, 15], [5, 5], [20, 20]];
+var sizes = [[25, 25], [5, 5], [20, 20]];
 // amt ranges for planets
 var planetAmtRange = [10, 20];
 // range of satelites per planet
@@ -81,6 +81,10 @@ function overlap(objects, x, y, size){
 	//if we find 1 object, we return true for overlaping
 	for (var i = 0; i < objects.length; i++) {
 		for (var j = 0; j < objects[i].length; j++) {
+			console.log(distance(objects[i][j], x, y), 
+				distance(objects[i][j], x, y) - minDistance - Math.ceil(size/2) - Math.ceil(objects[i][j].size/2),
+				"size: " + Math.ceil(size/2)
+				, "object: " + objects[i][j].size);
 			if(distance(objects[i][j], x, y) - minDistance - size/2 - objects[i][j].size/2 < 0){
 				return true;
 			}
