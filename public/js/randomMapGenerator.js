@@ -1,8 +1,6 @@
 //variables we need to define
 var PlayerPlanetAmount = 10;
-var playerImage = "images/planet.jpg";
-var planetImage = "images/planet1.jpg";
-
+var images = [[0,0], [1,6],[7,7]];
 var StartingSatelites = 3;
 var SatelitesRange = 10;
 var asteroidsSize = 3;
@@ -21,10 +19,10 @@ function createRandomMap(width, height, players, planets, asteroids)
 {
 	this.width = width;
 	this.height = height;
-	var indexes = [players, planets, asteroids]
-	var objects = new Array(3);
+	var indexes = [players, planets, asteroids,0]
+	var objects = new Array(4);
 	for (var i = 0; i < objects.length; i++) {
-		//players, planets, androidfields.
+		//players, planets, androidfields and empty array of satelites.
 		objects[i] = [];
 	}
 	
@@ -37,19 +35,20 @@ function createRandomMap(width, height, players, planets, asteroids)
 			var size = Math.floor(Math.random() * (sizeRange[1] - sizeRange[0]) + sizeRange[0]);
 			//call for a new random position
 			var xy = getNextXY(objects, size);
-
+			var img = Math.floor(Math.random() * (images[i][1] - images[i][0]) + images[i][0]);;
+			console.log(img);
 			//create objects depending of the current index of element type;
 			if(i == 0){
-				objects[i].push(new Players(xy[0], xy[1], PlayerPlanetAmount, StartingSatelites, playerImage));
+				objects[i].push(new Players(xy[0], xy[1], PlayerPlanetAmount, StartingSatelites, img));
 			}
 			else if(i == 1) {
 				//we create random atributes special for planets
-				var amt = (Math.random() * (planetAmtRange[1] - planetAmtRange[0]) + planetAmtRange[0]);
-				var satNum = (Math.random() * (satPerPlanetRange[1] - satPerPlanetRange[0]) + satPerPlanetRange[0]);
-				objects[i].push(new Planets(xy[0], xy[1], amt, satNum, planetImage));
+				var amt = Math.floor(Math.random() * (planetAmtRange[1] - planetAmtRange[0]) + planetAmtRange[0]);
+				var satNum = Math.floor(Math.random() * (satPerPlanetRange[1] - satPerPlanetRange[0]) + satPerPlanetRange[0]);
+				objects[i].push(new Planets(xy[0], xy[1], amt, satNum, img));
 			}
 			else if(i == 2){
-				objects[i].push(new AsteroidField(xy[0], xy[1], size, size));
+				objects[i].push(new AsteroidField(xy[0], xy[1], size, size, img));
 			}
 			//we add the size, since it's not in the constructor;
 			objects[i][objects[i].length-1].size = size;
