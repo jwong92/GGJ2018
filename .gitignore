@@ -1,0 +1,11 @@
+# Node build artifacts
+node_modules/
+.idea/
+
+# Local development
+*.env
+*.dev
+.DS_Store
+
+
+#only for autodeploy purposes because of paths mistakes on localhost and prod
