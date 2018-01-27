@@ -5,7 +5,7 @@ $(document).ready(function() {
   var counter = 15;
 
   for (var i=0; i<=numStars; i++) {
-    let star = $("<img src='img/stars/4pt-star2.svg'>").attr({
+    let star = $("<img src='img/stars/4pt-star.svg'>").attr({
       class: "star-" + i
     })
     $("#stars").append(star);
