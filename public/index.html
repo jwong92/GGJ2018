@@ -13,19 +13,27 @@
 </head>
 <body>
   <div class="hidden" id="hud">
-    <img src="img/stars/satellite-red.svg" /><span class="inv" id="sat_inv">3</span>
-    <img src="img/flags/flag-red.svg" /><span class="inv" id="flag_inv">4</span>
+
+    <h2>Costs</h2>
+    <div class="costs flag"><img src="img/stars/satellite-red.svg" /><span>100</span></div>
+    <div class="costs flag"><img src="img/flags/flag-red.svg" /><span>400</span></div>
+
+    <h2>Inventory</h2>
+    <div class="inv flag" >$<span id="money">4000</span></div>
+    <div class="inv flag"><img src="img/stars/satellite-red.svg" /><span>3</span></div>
+    <div class="inv flag"><img src="img/flags/flag-red.svg" /><span>4</span></div>
   </div>
   <canvas id="space-game"></canvas>
   <section id="intro">
     <h1>Space Colonies</h1>
-    <div>
+    <div class="slide">
       <p>It’s the year 2100. For hundreds of years, humans have ignored the warnings given to them by mother nature. There were rising temperatures in the coldest regions, and sub-freezing temperatures in deserts. Sea levels rose all over the coastal cities, submerging major metropolitans, while the west coast was left dry. After years of trying to combat the repercussions dealt to us by mother nature, the human race has finally lost the battle.  Earth has been left uninhabitable. Your mission, is to colonize other planets in the galaxy, and maintain contact with the human race by placing satellites near the newly colonized planets. <br />It’s a dangerous place out there!</p>
     </div>
-    <div>
+    <!-- <div class="slide">
       <h2>How to play</h2>
-      <p>place your satelites, by selecting them from your inventory</p>
-    </div>
+      <p>Discover space by placing your satelites &#40; <img src="img/stars/satellite-red.svg" /> OR <img src="img/stars/satellite-blue.svg" /> &#41; on the map.</p>
+      <p>Once your satelites are close enough to the planet you want to conquer, place a flag &#40; <img src="img/stars/satellite-red.svg" /> OR <img src="img/stars/satellite-blue.svg" /> &#41; on the planet to claim it. Your opponent can place their flags on the same planet. The owner of the planet is determined by the majority of flags</p>
+    </div> -->
     <div class="asteroid"><img src="img/stars/asteroid.svg" /></div>
     <button id="start">Start Game</button>
     <div class="asteroid"><img src="img/stars/asteroid.svg" /></div>

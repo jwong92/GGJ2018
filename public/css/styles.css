@@ -1,32 +1,69 @@
 @import url('https://fonts.googleapis.com/css?family=Londrina+Solid:300,400');
 
+html {
+box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: "Londrina Solid", arial, sans-serif;
+  font-weight: 400;
+  	margin:0;
+}
+
+/* HEADS UP DISPLAY */
 #hud {
   position: absolute;
   background-color: rgba(97, 89, 99, 0.85);
   top: 0;
   right: 0;
   text-align: right;
-  height: 20rem;
-  width: 6rem;
+  height: auto;
+  padding: 1rem;
+  text-align: left;
+}
+
+#hud h2 {
+  margin-top: 2rem;
+}
+
+#hud img {
+  height: 2rem;
+  width: auto;
+  margin: 0.5rem auto;
 }
 
 .inv {
   font-size: 3rem;
-  font-weight: bold;
 }
 
-.inv::before {
-  content: ""
+.costs {
+  font-size: 2rem;
+  font-style: italic;
 }
 
+.costs span::before {
+  content: "$";
+}
+
+.sat span::before, .flag span::before {
+  content: " : ";
+}
+
+#money {
+  font-size: 2rem;
+}
+
+/* INSTRUCTIONS */
 #intro {
-  font-family: "Londrina Solid", arial, sans-serif;
-  font-weight: 400;
   text-align: center;
   background-color: rgba(113, 23, 103, 0.74);
   padding: 2em;
   color: rgb(219, 219, 212);
-  width: 60%;
+  width: 70%;
   background: linear-gradient(45deg, #000000 ,#202D3F, #392C57, #36688B, #202D3F, #000000);
   position: absolute;
   top: 50%;
@@ -82,14 +119,6 @@ h1 {
   animation: rotate 1000ms infinite linear;
 }
 
-@keyframes rotate {
-    0% {
-      transform: rotateZ(0deg);
-    }
-    100% {
-      transform: rotateZ(360deg);
-    }
-}
 
 canvas{
     background: linear-gradient(45deg, #000000 ,#202D3F, #392C57, #36688B, #202D3F, #000000);
@@ -101,7 +130,7 @@ canvas{
 }
 
 body{
-	margin:0;
+
 }
 
 img {
@@ -114,4 +143,14 @@ img {
 
 [class^="stars"] {
   position: absolute;
+}
+
+
+@keyframes rotate {
+    0% {
+      transform: rotateZ(0deg);
+    }
+    100% {
+      transform: rotateZ(360deg);
+    }
 }
