@@ -89,11 +89,7 @@ img {
 }
 
 /* Position of stars */
-/* .star-1 {
-  top: calc(50% + 10px);
-  left: calc(50% + 10px);
+
+[class^="planet"] {
+  position: absolute;
 }
-
-.star-2 {
-
-} */
