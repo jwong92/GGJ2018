@@ -1,5 +1,5 @@
 //variables we need to define
-var PlayerPlanetAmount = 10;
+var PlayerPlanetAmount = 700;
 var images = [[0,0], [1,6],[8,8]];
 var StartingSatelites = 3;
 var SatelitesRange = 10;
@@ -7,7 +7,7 @@ var asteroidsSize = 3;
 // sizes ranges for players, planets and android fields
 var sizes = [[25, 25], [20, 30], [15,15]];
 // amt ranges for planets
-var planetAmtRange = [10, 20];
+var planetAmtRange = [15, 30];
 // range of satelites per planet
 var satPerPlanetRange = [2, 3];
 

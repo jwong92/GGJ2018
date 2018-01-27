@@ -27,6 +27,8 @@
 			this.planets = this.Map.planets
 			this.asteroidFields = this.Map.asteroidFields
 			this.satellites=[]
+			//change for real player number
+			this.current_player = this.players[0];
 		}
 
 		initListeners() {
@@ -37,13 +39,24 @@
 
 			var sattelite = this.Map.otherObjects[0];
 			var sat = new Satellites(mousePos.x,mousePos.y, sattelite.range);
+			sat.owner = this.current_player;
 			sat.size = sattelite.size
 			sat.object = sattelite.object
 
 
-			// Check if cell is empty
-			if (!this.objectOverlaps(sat)) {
+			// Check if cell is empty && (if we have the inventory OR the money)
+			if (!this.objectOverlaps(sat) && (this.current_player.sat > 0 || this.current_player.amount > this.Map.satellite_price)) {
 				this.satellites.push(sat);
+				this.Map.satellite_price *= 1.2;
+				if(this.current_player.sat > 0){
+					this.current_player.sat --;
+				}
+				else{
+					this.current_player.amount -= this.Map.satellite_price;
+				}
+			}
+			else{
+				//show something that we dont have money
 			}
 
 		}
@@ -52,6 +65,7 @@
 			this.ctx = this.canvas.getContext('2d');
 			this.canvas.width  = window.innerWidth;
 			this.canvas.height = window.innerHeight;
+			this.money_updater = setInterval(this.update_money.bind(this), 10000);
 		}
 		objectOverlaps(obj){
 			let overlapPlayers = this.players.some(player => this.overlap(obj, player))
@@ -89,6 +103,9 @@
 			this.drawObjects(this.asteroidFields)
 			this.drawObjects(this.satellites)
 		}
+		update_money(){
+			this.current_player.amount += this.current_player.rate;
+		}
 		runGame() {
 			requestAnimationFrame(this.runGame.bind(this))
 			this.drawGalaxy()
@@ -99,6 +116,8 @@
 	class Map {
 		constructor(callback) {
 			this.objects = createRandomMap(window.innerWidth, window.innerHeight, 1, 5, 3)
+			this.satellite_price = 100
+			this.flag_price = 700
 			this.loaded_images = 0
 			this.total_images = 0
 			this.players = this.objects[0]
