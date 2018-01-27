@@ -32,6 +32,7 @@ var imagesPaths = [
 	, "img/stars/satellite.svg"
 	];
 var loadedImages = 0;
+
 for (var i = 0; i < imagesPaths.length; i++) {
 	var image = new Image();
 	image.addEventListener('load',function(){
@@ -48,21 +49,6 @@ function onImageLoad(){
 	// Draw our universe
 	for (var i = 0; i < myUniverse.length; i++) {
 		for(var j= 0; j < myUniverse[i].length; j++) {
-
-			// put object to canvas
-			var img;
-			switch(i) {
-				case 0 :
-					img = images[0]; // player
-					break;
-				case 1 :
-					img = images[1]; // planet
-					break;
-				case 2 :
-					img = images[2] // asteroid
-					break;
-			}
-			
 		  // execute drawImage statements here
 		  console.log(myUniverse[i][j]);
 		  ctxs.drawImage(images[myUniverse[i][j].img], myUniverse[i][j].x - myUniverse[i][j].size/2, myUniverse[i][j].y - myUniverse[i][j].size/2, myUniverse[i][j].size, myUniverse[i][j].size);
@@ -90,6 +76,7 @@ canva.onclick = function (e) {
     var rectWidth = 50;
     var rectHeigh = 50;
     var range = 150;
+    var size = 25;
     ctxs.fillStyle = 'rgb(200, 0, 0)';
     console.log(e);
 
@@ -99,16 +86,16 @@ canva.onclick = function (e) {
     var sattelite = images[9];
     var marginLeft = canva.style.marginLeft;
     console.log(canva.offsetWidth,canva.offsetHeight );
-    var sat = new Satellites(mousePos.x/canva.offsetWidth*800, 
-    	mousePos.y/canva.offsetHeight*800 - rectHeigh/2
+    var sat = new Satellites(mousePos.x/canva.offsetWidth*window.innerWidth - size/2, 
+    	mousePos.y/canva.offsetHeight*window.innerHeight - size/2
     	, range, 9);
+	sat.size = size;
     
 
     // Check if cell is empty
     console.log("my universe",myUniverse);
     if (!overlap(myUniverse, sat.x, sat.y, 25)) {
 	    myUniverse[3].push(sat);
-	    sat.size = 25;
 	    ctxs.drawImage(sattelite
 	    	, mousePos.x/canva.offsetWidth*window.innerWidth - sat.size/2
 	    	, mousePos.y/canva.offsetHeight*window.innerHeight - sat.size/2
