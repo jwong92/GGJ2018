@@ -34,7 +34,23 @@
 		initListeners() {
 			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
 		}
-
+		canPlaceSatellite(sat){
+			if(this.getDistanceBetween(sat,this.current_user)<=sat.range){
+				return true
+			}
+			for (let satellite of this.current_user.satellites){
+				if(this.getDistanceBetween(sat,satellite)<=sat.range){
+					return true
+				}
+			}
+			return false
+		}
+		getDistanceBetween(first,second){
+			const xDif = first.x-second.x
+			const yDif = first.y-second.y
+			const distance = Math.sqrt( xDif*xDif+ yDif*yDif );
+			return distance
+		}
 		placeSatellite(e) {
 			var mousePos = this.getMousePos(e);
 

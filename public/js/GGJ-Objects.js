@@ -18,7 +18,7 @@ function Planets(posX, posY, amt, satNum, img,size) {
 function Satellites(posX, posY, range, img,size) {
 	this.x = posX;
 	this.y = posY;
-	this.area = range;
+	this.range = range;
 	this.img = img;
 	this.size = size;
 }
