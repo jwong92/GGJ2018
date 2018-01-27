@@ -1,7 +1,7 @@
 (function () {
 	"use strict"
-	const socket = io("http://localhost:5000");
-	// const socket = io("https://galaxy-control.herokuapp.com");
+	// const socket = io("http://localhost:5000");
+	const socket = io("https://galaxy-control.herokuapp.com");
 	window.send = send
 	socket.on('resend_info', (mess) => alert(mess));
 	socket.emit('get_room', function (response) {

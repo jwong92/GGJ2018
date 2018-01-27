@@ -42,21 +42,19 @@ function createRandomMap(width, height, players, planets, asteroids)
 			//create objects depending of the current index of element type;
 			if(i == 0){
 				img = "img/planets/planet1.svg";
-				objects[i].push(new Players(xy[0], xy[1], PlayerPlanetAmount, StartingSatelites, img));
+				objects[i].push(new Players(xy[0], xy[1], PlayerPlanetAmount, StartingSatelites, img,size));
 			}
 			else if(i == 1) {
 				//we create random atributes special for planets
-				img = "img/planets/planet"+generateRandomBetween(1,7)+".svg";
+				img = "img/planets/planet"+generateRandomBetween(2,7)+".svg";
 				var amt = Math.floor(Math.random() * (planetAmtRange[1] - planetAmtRange[0]) + planetAmtRange[0]);
 				var satNum = Math.floor(Math.random() * (satPerPlanetRange[1] - satPerPlanetRange[0]) + satPerPlanetRange[0]);
-				objects[i].push(new Planets(xy[0], xy[1], amt, satNum, img));
+				objects[i].push(new Planets(xy[0], xy[1], amt, satNum, img,size));
 			}
 			else if(i == 2){
 				img = "img/stars/asteroid.svg";
-				objects[i].push(new AsteroidField(xy[0], xy[1], size, size, img));
+				objects[i].push(new AsteroidField(xy[0], xy[1], size, size, img,size));
 			}
-			//we add the size, since it's not in the constructor;
-			objects[i][objects[i].length-1].size = size;
 		}
 	}
 	//we return an array of arrays
