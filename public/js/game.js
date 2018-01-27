@@ -125,7 +125,7 @@
 			this.asteroidFields = this.objects[2]
 			this.otherObjects=[
 				{
-					img:"img/stars/satellite.svg",
+					img:"img/stars/satellite-blue.svg",
 					size:25,
 					range:150
 				}
