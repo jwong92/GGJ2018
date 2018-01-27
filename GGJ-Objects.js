@@ -20,3 +20,12 @@ function AsteroidField(posX, posY, height, width) {
   this.h = height;
   this.w = width;
 }
+
+//Players
+function Players(posX, posY, amt, satNum, img) {
+  this.x = posX;
+  this.y = posY;
+  this.amount = amt;
+  this.sat = satNum;
+  this.photo = img;
+}
