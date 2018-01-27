@@ -1,0 +1,27 @@
+{
+  "name": "galaxy_control",
+  "version": "1.0.0",
+  "description": "game about transmitting signals across the galaxy to conquer new planets",
+  "main": "index.js",
+  "scripts": {
+    "start": "gulp | nodemon index.js "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwong92/GGJ2018.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwong92/GGJ2018/issues"
+  },
+  "homepage": "https://github.com/jwong92/GGJ2018#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.23.6",
+    "gulp": "^3.9.1"
+  }
+}
