@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  var numStars = 30;
+  var numStars = 40;
   var homepagePlanets = 4;
   var numPlanets = 7;
   var StarSrc = ["<img src='img/stars/4pt-star.svg'/>"];
