@@ -21,10 +21,10 @@ function createRandomMap(width, height, players, planets, asteroids)
 {
 	this.width = width;
 	this.height = height;
-	var indexes = [players, planets, asteroids]
-	var objects = new Array(3);
+	var indexes = [players, planets, asteroids,0]
+	var objects = new Array(4);
 	for (var i = 0; i < objects.length; i++) {
-		//players, planets, androidfields.
+		//players, planets, androidfields and empty array of satelites.
 		objects[i] = [];
 	}
 	
