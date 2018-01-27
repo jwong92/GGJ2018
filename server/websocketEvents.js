@@ -1,6 +1,6 @@
 function socketEvents(io) {
 	io.on('connection', async function (socket) {
-		console.log('huraah')
+		socket.emit('userInfo', ['test']);
 		// let params = socket.handshake.query;
 		// let name = validator.escape(params.name+"");
 		// let avatar = validator.escape(params.avatar+"");
