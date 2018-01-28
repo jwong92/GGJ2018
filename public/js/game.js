@@ -33,6 +33,7 @@
 
 		initListeners() {
 			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
+			this.canvas.addEventListener('click',this.getPosition.bind(this))
 		}
 
 		placeSatellite(e) {
@@ -58,7 +59,44 @@
 
 		}
 
-		initCanvas() {
+		getPosition(e){
+			let posX = e.clientX
+			let posY = e.clientY
+			let mousePos = this.getMousePos(e)
+			let overLappedPlanet = null
+
+			//Determine if planet clicked, and which planet was clicked
+			let overlapPlanets = this.planets.some(function(planet){
+				let temp = {size:1,x:mousePos.x,y:mousePos.y}
+				let isPlanetOverlapped = this.overlap(temp, planet)
+				if(isPlanetOverlapped){
+					overLappedPlanet = planet
+					return true
+				}
+				return false
+
+			}.bind(this))
+
+			//Determine which satellite is closest to clicked
+
+
+			if(overlapPlanets) {
+				let distance = this.satDistance(overLappedPlanet, posX, posY)
+				console.log(distance);
+			}
+			//if planets overlap and its true
+			// if (overlapPlanets){
+				//check if flag is near the satellite
+				//check for money and update player
+				//determine the array of the clicked planet
+
+		}
+
+		satDistance(object, x, y) {
+				return Math.sqrt(Math.pow(object.x - x, 2) + Math.pow(object.y - y, 2));
+		}
+
+		initCanvas(){
 			this.canvas = document.getElementById('space-game')
 			this.ctx = this.canvas.getContext('2d');
 			this.canvas.width = window.innerWidth;
@@ -68,7 +106,10 @@
 
 		objectOverlaps(obj) {
 			let overlapPlayers = this.players.some(player => this.overlap(obj, player))
-			let overlapPlanets = this.planets.some(planet => this.overlap(obj, planet))
+			// let overlapPlanets = this.planets.some(planet => this.overlap(obj, planet))
+			let overlapPlanets = this.planets.some(function(planet){
+				return this.overlap(obj, planet)
+			}.bind(this))
 			let overlapAsteroids = this.asteroidFields.some(af => this.overlap(obj, af))
 			let overlapSatellitesPlayer1 = this.players[0] && this.players[0].satellites.some(satellite => this.overlap(obj, satellite))
 			let overlapSatellitesPlayer2 = this.players[1] && this.players[1].satellites.some(satellite => this.overlap(obj, satellite))
@@ -98,7 +139,7 @@
 
 		drawObjects(objects) {
 			for (let object of objects) {
-				this.ctx.drawImage(object.object, object.x - object.size / 2, object.y - object.size / 2, object.size, object.size);
+				this.ctx.drawImage(object.object, object.x , object.y, object.size, object.size);
 			}
 		}
 
