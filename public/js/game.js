@@ -102,12 +102,12 @@
 			})
 		}
 		onClickBtnSat(){
-			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
-			this.canvas.removeEventListener('click',this.setFlag.bind(this))
+			$('#space-game').unbind();
+			$('#space-game').bind('click', this.placeSatellite.bind(this))
 		}
 		onClickBtnFlag(){
-			this.canvas.addEventListener('click',this.setFlag.bind(this))
-			this.canvas.removeEventListener('click', this.placeSatellite.bind(this))
+			$('#space-game').unbind();
+			$('#space-game').bind('click', this.setFlag.bind(this))
 		}
 		canPlaceSatellite(sat){
 			if(this.getDistanceBetween(sat,this.current_user)<=sat.range){
@@ -129,7 +129,8 @@
 			return distance
 		}
 		placeSatellite(e) {
-			this.canvas.removeEventListener('click', this.placeSatellite.bind(this));
+			$('#space-game').unbind()
+			
 			var mousePos = this.getMousePos(e);
 
 			var sattelite = this.current_user_index===0?this.Map.otherObjects[0]:this.Map.otherObjects[1];
@@ -160,7 +161,7 @@
 		}
 
 		setFlag(e){
-			this.canvas.removeEventListener('click',this.setFlag.bind(this))
+			$('#space-game').unbind()
 			let posX = e.clientX+this.xOffset;
 			let posY = e.clientY+this.yOffset;
 			let overLappedPlanet = null;
