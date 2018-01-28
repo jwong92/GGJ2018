@@ -63,8 +63,6 @@
 		initListeners() {
 			$("#btn_sat").click(this.onClickBtnSat.bind(this));
 			$("#btn_flag").click(this.onClickBtnFlag.bind(this));
-			//this.canvas.addEventListener('click', this.placeSatellite.bind(this))
-			//this.canvas.addEventListener('click',this.setFlag.bind(this))
 			this.canvas.addEventListener('mousemove', this.showPlanetDetails.bind(this))
 			document.getElementById('form').onsubmit=(ev)=>{
 				ev.preventDefault()
@@ -137,7 +135,7 @@
 		}
 		placeSatellite(e) {
 			$('#space-game').unbind()
-			
+
 			var mousePos = this.getMousePos(e);
 
 			var sattelite = this.current_user_index===0?this.Map.otherObjects[0]:this.Map.otherObjects[1];
@@ -375,7 +373,6 @@
 			return rate_for_planets+this.current_user.rate
 		}
 		showPlanetDetails(e) {
-			console.log("show planet fired");
 			var mousePos = this.getMousePos(e);
 			var planetArray = this.Map.planets;
 			let hoveredPlanet = null
