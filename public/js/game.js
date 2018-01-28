@@ -136,6 +136,24 @@
 			this.drawObjects(this.asteroidFields)
 			this.drawObjects(this.players[0].satellites)
 			this.players[1] ? this.drawObjects(this.players[1].satellites) : null
+			//this.drawClip();
+		}
+		drawClip(){
+			this.ctx.beginPath();
+			this.drawOneElementClip(this.current_user);
+			for(let satellite of this.current_user.satellites ){
+				this.drawOneElementClip(satellite);
+			}
+			this.ctx.globalCompositeOperation = 'destination-out';
+			this.fillStyle = "black";
+			this.ctx.fill();
+			this.ctx.globalCompositeOperation = 'source-over';
+		}
+		drawOneElementClip(object){
+			var distance = object.range;
+			if(distance == null)
+				distance = 150;
+			this.ctx.arc(object.x,object.y, distance/2, 0, Math.PI*2, false);
 		}
 		drawLines(){
 			for(let player of this.players){
