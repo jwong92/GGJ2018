@@ -57,6 +57,39 @@ body {
   font-size: 1.75rem;
 }
 
+/* PLANET DETAILS */
+#planet_specs {
+  position: absolute;
+  display: inline-block;
+  padding: 0.5em;
+  font-size: 0.75rem;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.76);
+}
+
+#planet_specs div {
+  /* display: inline-block; */
+  margin: 0 3em;
+}
+
+#planet_specs h2 {
+  font-size: 1.5em;
+  margin: 0 auto;
+}
+
+#planet_specs h3 {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+#sat_bonus::before {
+  content: "   ";
+}
+
+#planet_cost::before {
+  content: "   $";
+}
+
 /* INSTRUCTIONS */
 #intro {
   text-align: center;

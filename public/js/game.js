@@ -33,6 +33,8 @@
 
 		initListeners() {
 			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
+			this.canvas.addEventListener('mousemove', this.showPlanetDetails.bind(this))
+
 		}
 		canPlaceSatellite(sat){
 			if(this.getDistanceBetween(sat,this.current_user)<=sat.range){
@@ -187,6 +189,50 @@
 			$(".inv.sat span").html(this.current_user.sat)
 			$(".costs.sat span").html(this.Map.satellite_price)
 			$("#money_rate").html(this.current_user.rate)
+		}
+		showPlanetDetails(e) {
+			console.log("show planet fired");
+			var mousePos = this.getMousePos(e);
+			var planetArray = this.Map.planets;
+			let hoveredPlanet = null
+			// let overlapPlanets = this.planets.some(planet => this.overlap({x:mousePos.x,y:mousePos.y,size:1}, planet))
+			let overlapPlanets = this.planets.some(function(planet){
+				let isPlanetOverlapped = this.overlap({x:mousePos.x,y:mousePos.y,size:1}, planet);
+				if(isPlanetOverlapped){
+					hoveredPlanet=planet;
+					return true
+				}
+				return false
+			},this);
+				if (overlapPlanets) {
+					$("#planet_specs").attr("style", "");
+					$("#planet_specs").css("top",mousePos.y+"px");
+					$("#planet_specs").css("left",mousePos.x+"px");
+					$("#planet_cost").html(hoveredPlanet.amount);
+					$("#sat_bonus").html(hoveredPlanet.sat);
+					 console.log("I'm on the planet!");
+				} else {
+					$("#planet_specs").css("display","none");
+				}
+			// var onPlanet = function(planet) {
+			// 	let minX = planet.x - (planet.size/2);
+			// 	let maxX = planet.x + (planet.size/2);
+			// 	let minY = planet.y - (planet.size/2);
+			// 	let maxY = planet.y + (planet.size/2);
+			// 	//check if the mouse is currently over a planet
+			// 	if (mousePos.x > minX && mousePos.x < maxX && mousePos.y > minY && mousePos.y < maxY){
+			// 		$("#planet_specs").attr("style", "");
+			// 		$("#planet_specs").css("top",mousePos.y+"px");
+			// 		$("#planet_specs").css("left",mousePos.x+"px");
+			// 		$("#planet_cost").html(planet.amount);
+			// 		$("#sat_bonus").html(planet.sat);
+			// 		 console.log("I'm on the planet!");
+			// 	} else {
+			// 		$("#planet_specs").css("display","none");
+			// 	}
+			// }
+			// return planetArray.some(onPlanet);
+
 		}
 
 	}
