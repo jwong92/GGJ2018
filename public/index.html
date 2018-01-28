@@ -4,52 +4,68 @@
     <meta charset="UTF-8">
     <title>Our game</title>
     <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
     <link rel="icon" href="img/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="hidden" id="hud">
+<div class="wrapper">
+    <div class="hidden" id="hud">
 
-    <h2>Costs</h2>
-    <div class="costs sat"><img src="img/stars/satellite-red.svg" /><span>100</span></div>
-    <div class="costs flag"><img src="img/flags/flag-red.svg" /><span>400</span></div>
+        <h2>Costs</h2>
+        <div class="costs sat"><img src="img/stars/satellite-red.svg"/><span>100</span></div>
+        <div class="costs flag"><img src="img/flags/flag-red.svg"/><span>400</span></div>
 
-    <h2>Inventory</h2>
-    <div class="inv money">+<span id="money_rate">40</span>/10sec.</div>
-    <div class="inv money"><span id="money">4000</span></div>
-    <div class="inv sat"><img src="img/stars/satellite-red.svg" /><span>5</span></div>
-  </div>
-  <div id="planet_specs">
-    <h2>Planet Details</h2>
-    <div><h3>Rewards:</h3><span id="sat_bonus"></span> Satellites</div>
-    <div><h3>Pay Rate: +</h3><span id="planet_rate"></span></div>
-    <div><h3>Flags: </h3><img src="img/flags/flag-red.svg" /><span id="flag_red">0</span><img src="img/flags/flag-blue.svg" /><span id="flag_blue">0</span></div>
-  </div>
-  <canvas id="space-game"></canvas>
-  <section id="intro">
-    <h1>Space Colonies</h1>
-    <div class="slide">
-      <p>It’s the year 2100. For hundreds of years, humans have ignored the warnings given to them by mother nature. There were rising temperatures in the coldest regions, and sub-freezing temperatures in deserts. Sea levels rose all over the coastal cities, submerging major metropolitans, while the west coast was left dry. After years of trying to combat the repercussions dealt to us by mother nature, the human race has finally lost the battle.  Earth has been left uninhabitable. Your mission, is to colonize other planets in the galaxy, and maintain contact with the human race by placing satellites near the newly colonized planets. <br />It’s a dangerous place out there!</p>
+        <h2>Inventory</h2>
+        <div class="inv money">+<span id="money_rate">40</span>/10sec.</div>
+        <div class="inv money"><span id="money">4000</span></div>
+        <div class="inv sat"><img src="img/stars/satellite-red.svg"/><span>5</span></div>
     </div>
-    <!-- <div class="slide">
-      <h2>How to play</h2>
-      <p>Discover space by placing your satelites &#40; <img src="img/stars/satellite-red.svg" /> OR <img src="img/stars/satellite-blue.svg" /> &#41; on the map.</p>
-      <p>Once your satelites are close enough to the planet you want to conquer, place a flag &#40; <img src="img/stars/satellite-red.svg" /> OR <img src="img/stars/satellite-blue.svg" /> &#41; on the planet to claim it. Your opponent can place their flags on the same planet. The owner of the planet is determined by the majority of flags</p>
-    </div> -->
-    <div class="asteroid"><img src="img/stars/asteroid.svg" /></div>
-    <button id="start">Start Game</button>
-    <div class="asteroid"><img src="img/stars/asteroid.svg" /></div>
-    <button class="welcome_nav" id="prev">&lt; Prev</button>
-    <button class="welcome_nav" id="next">Next &gt;</button>
-    <div class="asteroid"><img src="img/stars/asteroid.svg" /></div>
-    <div id="stars"></div>
-    <div id="planets"></div>
-  </section>
-  <footer><a href="http://www.freepik.com">Some images Designed by Freepik</a></footer>
+    <div id="planet_specs">
+        <h2>Planet Details</h2>
+        <div><h3>Rewards:</h3><span id="sat_bonus"></span> Satellites</div>
+        <div><h3>Pay Rate: +</h3><span id="planet_rate"></span></div>
+        <div><h3>Flags: </h3><img src="img/flags/flag-red.svg"/><span id="flag_red">0</span><img
+                src="img/flags/flag-blue.svg"/><span id="flag_blue">0</span></div>
+    </div>
+    <form id="form" onsubmit="return false">
+        <label for="messageToOpponent" id="messageFromOpponent"></label>
+        <div class="input-group">
+            <input type="text" id="messageToOpponent">
+            <button type="submit">Send</button>
+        </div>
+    </form>
+    <canvas id="space-game"></canvas>
+    <section id="intro">
+        <h1>Space Colonies</h1>
+        <div class="slide">
+            <p>It’s the year 2100. For hundreds of years, humans have ignored the warnings given to them by mother
+                nature. There were rising temperatures in the coldest regions, and sub-freezing temperatures in deserts.
+                Sea levels rose all over the coastal cities, submerging major metropolitans, while the west coast was
+                left dry. After years of trying to combat the repercussions dealt to us by mother nature, the human race
+                has finally lost the battle. Earth has been left uninhabitable. Your mission, is to colonize other
+                planets in the galaxy, and maintain contact with the human race by placing satellites near the newly
+                colonized planets. <br/>It’s a dangerous place out there!</p>
+        </div>
+        <!-- <div class="slide">
+          <h2>How to play</h2>
+          <p>Discover space by placing your satelites &#40; <img src="img/stars/satellite-red.svg" /> OR <img src="img/stars/satellite-blue.svg" /> &#41; on the map.</p>
+          <p>Once your satelites are close enough to the planet you want to conquer, place a flag &#40; <img src="img/stars/satellite-red.svg" /> OR <img src="img/stars/satellite-blue.svg" /> &#41; on the planet to claim it. Your opponent can place their flags on the same planet. The owner of the planet is determined by the majority of flags</p>
+        </div> -->
+        <div class="asteroid"><img src="img/stars/asteroid.svg"/></div>
+        <button id="start">Start Game</button>
+        <div class="asteroid"><img src="img/stars/asteroid.svg"/></div>
+        <button class="welcome_nav" id="prev">&lt; Prev</button>
+        <button class="welcome_nav" id="next">Next &gt;</button>
+        <div class="asteroid"><img src="img/stars/asteroid.svg"/></div>
+        <div id="stars"></div>
+        <div id="planets"></div>
+    </section>
+</div>
+<footer><a href="http://www.freepik.com">Some images Designed by Freepik</a></footer>
 <script src="js/socket.io.slim.js"></script>
 <script src="js/game.js"></script>
 <!--Add your scripts below if needed-->

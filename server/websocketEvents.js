@@ -25,7 +25,7 @@ function socketEvents(io) {
 			}
 
 			if (!connected) {
-				const objects = mapGenerator(3000, 3000, 2, 15, 13)
+				const objects = mapGenerator(2000, 2000, 2, 25, 13)
 				let newRoom = {id: rooms.length, participants: [socket], objects}
 				socket.roomId = newRoom.id
 				rooms.push(newRoom)
@@ -38,6 +38,9 @@ function socketEvents(io) {
 		})
 		socket.on('satelites_changed', (satellites,userindex) => {
 			socket.broadcast.to(socket.roomId).emit('updateSatellites', userindex,satellites);
+		})
+		socket.on('send info',function (message) {
+			socket.broadcast.to(socket.roomId).emit('resend_info', message);
 		})
 		socket.on('disconnect', () => {
 			let closingRoom = rooms[socket.roomId]

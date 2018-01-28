@@ -1,30 +1,14 @@
 (function () {
 	"use strict"
-	// const socket = io("http://localhost:5000");
-	const socket = io("https://galaxy-control.herokuapp.com");
-	window.send = send
-	socket.on('resend_info', (mess) => alert(mess));
-	socket.on('end game', (mess) => {
-		alert(mess)
-		window.location.href = window.location.href
-	});
+	const socket = io("http://localhost:5000");
+	// const socket = io("https://galaxy-control.herokuapp.com");
+
 	let app=null
 	document.getElementById('start').addEventListener('click',function () {
 		socket.emit('get_room', function (objects,index) {
 			app =new Game(objects,index)
 		});
 	})
-	socket.on('updateSatellites',function (index,satellites) {
-		var enemySattelite = app.current_user_index===0?app.Map.otherObjects[1]:app.Map.otherObjects[0];
-		satellites.forEach((satellite)=>{
-			satellite.object=enemySattelite.object
-		})
-		app.players[index].satellites=satellites
-	})
-
-	function send(message) {
-		socket.emit('send_info', message)
-	}
 
 	class Game {
 
@@ -48,29 +32,32 @@
 			this.yOffset=this.current_user.y>1000?this.Map.globalHeight-this.canvas.height:0
 		}
 		manageKeys(key, ev) {
-			ev.preventDefault()
 			switch (key) {
 				case 37:
 				case 65:
 				case 'left':
+					ev.preventDefault()
 					if(this.xOffset<=0)return
 					this.xOffset-=this.defaultOffset
 					break;
 				case 38:
 				case 87:
 				case 'up':
+					ev.preventDefault()
 					if(this.yOffset<=0)return
 					this.yOffset-=this.defaultOffset
 					break;
 				case 39:
 				case 68:
 				case 'right':
+					ev.preventDefault()
 					if(this.xOffset>=this.Map.globalWidth-this.canvas.width)return
 					this.xOffset+=this.defaultOffset
 					break;
 				case 40:
 				case 83:
 				case 'down':
+					ev.preventDefault()
 					if(this.yOffset>=this.Map.globalHeight-this.canvas.height)return
 					this.yOffset+=this.defaultOffset
 					break;
@@ -80,9 +67,35 @@
 			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
 			this.canvas.addEventListener('mousemove', this.showPlanetDetails.bind(this))
 			this.canvas.addEventListener('click',this.getPosition.bind(this))
+			document.getElementById('form').onsubmit=(ev)=>{
+				ev.preventDefault()
+				const message = document.getElementById('messageToOpponent').value
+				if(message){
+					socket.emit('send_info', message)
+				}
+				document.getElementById('form').reset()
+				return false
+			}
 			document.addEventListener('keydown',(ev) =>{
 				let key = ev.keyCode;
 				this.manageKeys(key, ev)
+			})
+			socket.on('resend_info', (mess) => {
+				let messageElem =$("#messageFromOpponent")
+				messageElem.fadeIn()
+				messageElem.val(mess)
+				messageElem.fadeOut( "slow")
+			});
+			socket.on('end game', (mess) => {
+				alert(mess)
+				window.location.href = window.location.href
+			});
+			socket.on('updateSatellites',(index,satellites) =>{
+				var enemySattelite = this.current_user_index===0?this.Map.otherObjects[1]:this.Map.otherObjects[0];
+				satellites.forEach((satellite)=>{
+					satellite.object=enemySattelite.object
+				})
+				this.players[index].satellites=satellites
 			})
 		}
 		canPlaceSatellite(sat){
@@ -200,7 +213,7 @@
 					this.players[currOwner].rate -= overLappedPlanet.amount;
 				}
 				if(newOwner != -1){
-					this.players[newOwner].rate += overLappedPlanet.amount;
+					// this.players[newOwner].rate += overLappedPlanet.amount;
 				}
 			}
 		}
@@ -339,8 +352,8 @@
 			},this);
 				if (overlapPlanets) {
 					$("#planet_specs").attr("style", "");
-					$("#planet_specs").css("top",mousePos.y-hoveredPlanet.size+"px");
-					$("#planet_specs").css("left",mousePos.x+"px");
+					$("#planet_specs").css("top",mousePos.y-this.yOffset-hoveredPlanet.size+"px");
+					$("#planet_specs").css("left",mousePos.x-this.xOffset+"px");
 					$("#planet_rate").html(hoveredPlanet.amount);
 					$("#sat_bonus").html(hoveredPlanet.sat);
 					$("#flag_red").html(hoveredPlanet.flag2);
@@ -368,12 +381,12 @@
 			this.otherObjects = [
 				{
 					img: "img/stars/satellite-blue.svg",
-					size: 25,
+					size: 40,
 					range: 150
 				},
 				{
 					img: "img/stars/satellite-red.svg",
-					size: 25,
+					size: 40,
 					range: 150
 				}
 			]

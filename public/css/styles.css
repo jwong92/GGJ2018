@@ -20,12 +20,40 @@ body {
   background-color: rgba(97, 89, 99, 0.85);
   top: 0;
   right: 0;
-  text-align: right;
   height: auto;
   padding: 1rem;
   text-align: left;
 }
-
+#form{
+  position: absolute;
+  background-color: rgba(97, 89, 99, 0.55);
+  bottom: 0;
+  right: 40%;
+  padding: 1rem;
+}
+#form label{
+  display: block;
+  min-width: 300px;
+  max-width: 400px;
+  color:darkred;
+  font-size: 1.5rem;
+}
+.wrapper{
+  width: 100%;
+  height:100vh;
+  position: relative;
+}
+.input-group{
+  display: flex;
+}
+.input-group input{
+  margin-right: 1rem;
+  flex-grow: 1;
+}
+#messageFromOpponent{
+  color: #ff1f40;
+  font-size:1.5rem;
+}
 #hud h2 {
   margin-top: 2rem;
 }
