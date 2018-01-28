@@ -61,7 +61,8 @@
 
 
 			// Check if cell is empty && (if we have the inventory OR the money)
-			if (!this.objectOverlaps(sat) && (this.current_user.amount > this.Map.satellite_price || this.current_user.sat > 0)) {
+			if (!this.objectOverlaps(sat) && this.canPlaceSatellite(sat) &&
+				(this.current_user.amount > this.Map.satellite_price || this.current_user.sat > 0)) {
 				this.current_user.satellites.push(sat);
 				if(this.current_user.sat > 0){
 					this.current_user.sat --;
