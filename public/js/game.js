@@ -1,20 +1,12 @@
 (function () {
 	"use strict"
-	// const socket = io("http://localhost:5000");
-	const socket = io("https://galaxy-control.herokuapp.com");
-
-	let app=null
+	const socket = io("http://localhost:5000");
+	// const socket = io("https://galaxy-control.herokuapp.com");
 	document.getElementById('start').addEventListener('click',function () {
 		socket.emit('get_room', function (objects,index) {
-			app =new Game(objects,index)
+			new Game(objects,index)
 		});
 	})
-	socket.on('resend_info', (mess) => {
-		let messageElem =$("#messageFromOpponent")
-		messageElem.fadeIn()
-		messageElem.text(mess)
-		messageElem.fadeOut(5000)
-	});
 	class Game {
 
 		constructor(objects,index) {
@@ -89,7 +81,7 @@
 
 			socket.on('end game', (mess) => {
 				alert(mess)
-				window.location.href = window.location.href
+				// window.location.href = window.location.href
 			});
 			socket.on('updateSatellites',(index,satellites) =>{
 				var enemySattelite = this.current_user_index===0?this.Map.otherObjects[1]:this.Map.otherObjects[0];
@@ -98,6 +90,21 @@
 				})
 				this.players[index].satellites=satellites
 			})
+			socket.on('resend_info', (mess) => {
+				let messageElem =$("#messageFromOpponent")
+				messageElem.fadeIn()
+				messageElem.text(mess)
+				messageElem.fadeOut(5000)
+			});
+			socket.on('planet_flags_update', (planet) => {
+				const updatedPlanet = this.planets.find((pl)=>pl.id===planet.planetId)
+				if(planet.flag1){
+					updatedPlanet.flag1=planet.flag1
+				}else{
+					updatedPlanet.flag2=planet.flag2
+				}
+
+			});
 		}
 		canPlaceSatellite(sat){
 			if(this.getDistanceBetween(sat,this.current_user)<=sat.range){
@@ -153,10 +160,6 @@
 			let posY = e.clientY+this.yOffset;
 			let overLappedPlanet = null;
 			let mousePos = this.getMousePos(e);
-			let satClose;
-			let currOwner = -1;
-			let newOwner = -1;
-			let rate;
 
 			//Determine if planet clicked, and which planet was clicked
 			let overlapPlanets = this.planets.some(function(planet){
@@ -164,14 +167,6 @@
 				let isPlanetOverlapped = this.overlap(temp, planet)
 				if(isPlanetOverlapped){
 					overLappedPlanet = planet
-					if (planet.flag1 > planet.flag2) {
-						currOwner = 0;
-					}
-					else if(planet.flag1 < planet.flag2) {
-						currOwner = 1;
-					}
-					else
-						currOwner = -1;
 					return true
 				}
 				return false
@@ -181,24 +176,17 @@
 			//Determine which satellite is closest to clicked
 			//currSat = boolean of if a satellite was close enough
 			if(overlapPlanets) {
-					satClose = this.current_user.satellites.some(function(satellite){
+					this.current_user.satellites.some(function(satellite){
 					let newSatDistance = this.satDistance(satellite, posX, posY)
 					if (newSatDistance <= satellite.range){
 						if (this.current_user.amount >= 400){
 							if(this.current_user_index === 0) {
 								overLappedPlanet.flag1 += 1;
+								socket.emit('planet_flags_changed',{planetId:overLappedPlanet.id,flag1:overLappedPlanet.flag1})
 							}
 							else {
 								overLappedPlanet.flag2 += 1;
-							}
-							if(overLappedPlanet.flag1 > overLappedPlanet.flag2) {
-								newOwner = 0;
-							}
-							else if(overLappedPlanet.flag1 < overLappedPlanet.flag2){
-								newOwner = 1;
-							}
-							else {
-								newOwner = -1;
+								socket.emit('planet_flags_changed',{planetId:overLappedPlanet.id,flag2:overLappedPlanet.flag2})
 							}
 							this.current_user.amount -= 400;
 							this.current_user.sat += overLappedPlanet.sat;
@@ -209,14 +197,6 @@
 						return false;
 					}
 				}.bind(this))
-			}
-			if(overLappedPlanet!= null){
-				if(currOwner != -1) {
-					this.players[currOwner].rate -= overLappedPlanet.amount;
-				}
-				if(newOwner != -1){
-					this.players[newOwner].rate += overLappedPlanet.amount;
-				}
 			}
 		}
 
@@ -270,13 +250,24 @@
 				this.ctx.drawImage(object.object, object.x-this.xOffset , object.y-this.yOffset, object.size, object.size);
 			}
 		}
-
+		drawFlags(){
+			this.planets.forEach((planet)=>{
+				let blueFlag = this.Map.otherObjects[2]
+				let redFlag = this.Map.otherObjects[3]
+				if (planet.flag1 > planet.flag2) {
+					this.ctx.drawImage(blueFlag.object, planet.x+planet.size/2-blueFlag.size/2-this.xOffset  , planet.y-blueFlag.size-this.yOffset, blueFlag.size, blueFlag.size);
+				}else if(planet.flag1 < planet.flag2){
+					this.ctx.drawImage(redFlag.object, planet.x+planet.size/2-redFlag.size/2-this.xOffset  , planet.y-redFlag.size-this.yOffset, redFlag.size, redFlag.size);
+				}
+			})
+		}
 		drawGalaxy() {
 			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 			// this.drawClip();
 			this.drawLines();
 			this.drawObjects(this.players)
 			this.drawObjects(this.planets)
+			this.drawFlags()
 			this.drawObjects(this.asteroidFields)
 			this.drawObjects(this.players[0].satellites)
 			this.players[1] ? this.drawObjects(this.players[1].satellites) : null
@@ -337,7 +328,20 @@
 			$("#money").html(this.current_user.amount)
 			$(".inv.sat span").html(this.current_user.sat)
 			$(".costs.sat span").html(this.Map.satellite_price)
-			$("#money_rate").html(this.current_user.rate)
+			// $("#money_rate").html(this.current_user.rate)
+			$("#money_rate").html(this.calculateTotalRate())
+		}
+		calculateTotalRate(){
+			let userPlanets = this.planets.filter((planet)=>{
+				return this.current_user_index===0?
+					planet.flag1>planet.flag2:
+					planet.flag2>planet.flag1
+			})
+			let rate_for_planets=0
+			userPlanets.forEach((planet)=>{
+				rate_for_planets+=planet.amount
+			})
+			return rate_for_planets+this.current_user.rate
 		}
 		showPlanetDetails(e) {
 			console.log("show planet fired");
@@ -389,6 +393,14 @@
 					img: "img/stars/satellite-red.svg",
 					size: 40,
 					range: 150
+				},
+				{
+					img: "img/flags/flag-blue.svg",
+					size: 40
+				},
+				{
+					img: "img/flags/flag-red.svg",
+					size: 40
 				}
 			]
 			this.loadImages(callback)

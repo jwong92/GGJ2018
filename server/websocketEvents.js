@@ -39,6 +39,9 @@ function socketEvents(io) {
 		socket.on('satelites_changed', (satellites,userindex) => {
 			socket.broadcast.to(socket.roomId).emit('updateSatellites', userindex,satellites);
 		})
+		socket.on('planet_flags_changed', (planet) => {
+			socket.broadcast.to(socket.roomId).emit('planet_flags_update', planet);
+		})
 		socket.on('send_info',function (message) {
 			socket.broadcast.to(socket.roomId).emit('resend_info', message);
 			socket.broadcast.emit('resend_info', message);
