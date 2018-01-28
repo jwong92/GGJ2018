@@ -18,7 +18,7 @@ body {
 #hud {
   position: absolute;
   background-color: rgba(97, 89, 99, 0.85);
-  top: 0;
+  top: -1000px;
   left:15%;
   /*right: 0;*/
   height: 50px;
@@ -36,13 +36,13 @@ body {
 	flex:1;
 }
 
-.kid-large {
+/* .kid-large {
 	flex:1.5;
-}
+} */
 
-.right {
+/* .right {
 	text-align: right;
-}
+} */
 
 .btn {
   font-family: "Londrina Solid", arial, sans-serif;
@@ -99,8 +99,10 @@ body {
 #hud h2 {
   /*margin-top: 2rem;*/
   margin:0;
-  color: #ff9f4f;
+  text-align: right;
+  /* color: #ff9f4f; */
   padding-left: 0.5rem;
+  font-size: 1em;
 }
 
 #hud img {
@@ -110,11 +112,12 @@ body {
 }
 
 .inv {
-  font-size: 1.5rem;
+  font-size: 0.8em;
+  margin-left: 0.25em;
 }
 
 .costs {
-  font-size: 1.5rem;
+  /* font-size: 1.5rem; */
   font-style: italic;
   display: flex;
 }
@@ -135,9 +138,13 @@ body {
   vertical-align: super;
 }
 
-.money {
+.money, .kid span {
   font-size: 1.2rem;
   padding-top:5px;
+}
+
+.score {
+  margin-left: 0.5em;
 }
 
 /* PLANET DETAILS */
@@ -236,7 +243,7 @@ h1 {
   width: 3.5em;
   height: auto;
   transition: all 0s linear;
-  animation: rotate 1000ms infinite linear;
+  animation: rotate 2000ms infinite linear;
 }
 
 
