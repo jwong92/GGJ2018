@@ -126,6 +126,7 @@
 			sat.size = sattelite.size
 			sat.object = sattelite.object
 
+			this.showMssg(!this.canPlaceSatellite(sat),"You cannot place a satellite here");
 
 			// Check if cell is empty && (if we have the inventory OR the money)
 			if (!this.objectOverlaps(sat) && this.canPlaceSatellite(sat) &&
@@ -157,6 +158,8 @@
 			let currOwner = -1;
 			let newOwner = -1;
 			let rate;
+			let money = true;
+			let planet = true;
 
 			//Determine if planet clicked, and which planet was clicked
 			let overlapPlanets = this.planets.some(function(planet){
@@ -187,9 +190,11 @@
 						if (this.current_user.amount >= 400){
 							if(this.current_user_index === 0) {
 								overLappedPlanet.flag1 += 1;
+								this.showMssg(planet, "You just gained a planet");
 							}
 							else {
 								overLappedPlanet.flag2 += 1;
+								this.showMssg(planet, "You just gained a planet");
 							}
 							if(overLappedPlanet.flag1 > overLappedPlanet.flag2) {
 								newOwner = 0;
@@ -202,6 +207,8 @@
 							}
 							this.current_user.amount -= 400;
 							this.current_user.sat += overLappedPlanet.sat;
+						} else {
+							this.showMssg(money, "You don't have enough money");
 						}
 						return true;
 					}
@@ -209,7 +216,9 @@
 						return false;
 					}
 				}.bind(this))
+				this.showMssg(!satClose, "Your satellite is out of range");
 			}
+
 			if(overLappedPlanet!= null){
 				if(currOwner != -1) {
 					this.players[currOwner].rate -= overLappedPlanet.amount;
@@ -222,6 +231,16 @@
 
 		satDistance(object, x, y) {
 			return Math.sqrt(Math.pow(object.x - x, 2) + Math.pow(object.y - y, 2));
+		}
+
+		showMssg(specifics, mssg){
+			//if you don't have enough money
+			if(specifics) {
+				//show the box and write html
+				$("#message").html(mssg);
+				$("#mssgBox").css("display", "inherit");
+				$("#mssgBox").fadeOut(1100);
+			}
 		}
 
 		initCanvas(){
