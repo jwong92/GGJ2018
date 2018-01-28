@@ -4,9 +4,23 @@
 	const socket = io("https://galaxy-control.herokuapp.com");
 	window.send = send
 	socket.on('resend_info', (mess) => alert(mess));
-	socket.emit('get_room', function (response) {
-		console.log(response)
+	socket.on('end game', (mess) => {
+		alert(mess)
+		window.location.href = '/public'
 	});
+	let app=null
+	document.getElementById('start').addEventListener('click',function () {
+		socket.emit('get_room', function (objects,index) {
+			app =new Game(objects,index)
+		});
+	})
+	socket.on('updateSatellites',function (index,satellites) {
+		var enemySattelite = app.current_user_index===0?app.Map.otherObjects[1]:app.Map.otherObjects[0];
+		satellites.forEach((satellite)=>{
+			satellite.object=enemySattelite.object
+		})
+		app.players[index].satellites=satellites
+	})
 
 	function send(message) {
 		socket.emit('send_info', message)
@@ -14,16 +28,16 @@
 
 	class Game {
 
-		constructor() {
+		constructor(objects,index) {
 			this.loaded_images = 0
-			this.current_user_index = 0
+			this.current_user_index = index
+			this.Map = new Map(this.runGame.bind(this), this,objects)
 			this.init()
 		}
 
 		init() {
 			this.initCanvas()
 			this.initListeners()
-			this.Map = new Map(this.runGame.bind(this), this)
 			this.players = this.Map.players
 			this.planets = this.Map.planets
 			this.asteroidFields = this.Map.asteroidFields
@@ -34,16 +48,16 @@
 		initListeners() {
 			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
 			this.canvas.addEventListener('mousemove', this.showPlanetDetails.bind(this))
-
+			this.canvas.addEventListener('click',this.getPosition.bind(this))
 		}
 		canPlaceSatellite(sat){
 			if(this.getDistanceBetween(sat,this.current_user)<=sat.range){
-				sat.predessesor = this.current_user;
+				sat.predessesor = [this.current_user.x, this.current_user.y];
 				return true
 			}
 			for (let satellite of this.current_user.satellites){
 				if(this.getDistanceBetween(sat,satellite)<=sat.range){
-					sat.predessesor = satellite;
+					sat.predessesor = [satellite.x, satellite.y];
 					return true
 				}
 			}
@@ -58,7 +72,7 @@
 		placeSatellite(e) {
 			var mousePos = this.getMousePos(e);
 
-			var sattelite = this.Map.otherObjects[0];
+			var sattelite = this.current_user_index===0?this.Map.otherObjects[0]:this.Map.otherObjects[1];
 			var sat = new Satellites(mousePos.x, mousePos.y, sattelite.range);
 			sat.size = sattelite.size
 			sat.object = sattelite.object
@@ -68,6 +82,7 @@
 			if (!this.objectOverlaps(sat) && this.canPlaceSatellite(sat) &&
 				(this.current_user.amount > this.Map.satellite_price || this.current_user.sat > 0)) {
 				this.current_user.satellites.push(sat);
+				socket.emit('satelites_changed',this.current_user.satellites,this.current_user_index)
 				if(this.current_user.sat > 0){
 					this.current_user.sat --;
 				}
@@ -75,9 +90,6 @@
 					this.current_user.amount -= this.Map.satellite_price;
 					this.Map.satellite_price = Math.floor(this.Map.satellite_price * 1.2);
 				}
-
-
-
 
 				this.updateHud();
 			}
@@ -87,7 +99,53 @@
 
 		}
 
-		initCanvas() {
+		getPosition(e){
+			let posX = e.clientX
+			let posY = e.clientY
+			let overLappedPlanet = null;
+			let mousePos = this.getMousePos(e)
+
+			//Determine if planet clicked, and which planet was clicked
+			let overlapPlanets = this.planets.some(function(planet){
+				let temp = {size:1,x:mousePos.x,y:mousePos.y}
+				let isPlanetOverlapped = this.overlap(temp, planet)
+				if(isPlanetOverlapped){
+					overLappedPlanet = planet
+					return true
+				}
+				return false
+
+			}.bind(this))
+
+			//Determine which satellite is closest to clicked
+			//currSat = boolean of if a satellite was close enough
+			if(overlapPlanets) {
+				let satClose = this.current_user.satellites.some(function(satellite){
+					let newSatDistance = this.satDistance(satellite, posX, posY)
+					if (newSatDistance <= satellite.range){
+						if (this.current_user.amount >= overLappedPlanet.amount){
+							if(this.current_user_index === 0) {
+								overLappedPlanet.flag1 += 1;
+							}
+							else {
+								overLappedPlanet.flag2 += 1;
+							}
+							this.current_user.amount -= overLappedPlanet.amount;
+						}
+						return true;
+					}
+					else {
+						return false;
+					}
+				}.bind(this))
+			}
+		}
+
+		satDistance(object, x, y) {
+			return Math.sqrt(Math.pow(object.x - x, 2) + Math.pow(object.y - y, 2));
+		}
+
+		initCanvas(){
 			this.canvas = document.getElementById('space-game')
 			this.ctx = this.canvas.getContext('2d');
 			this.canvas.width = window.innerWidth;
@@ -97,7 +155,10 @@
 
 		objectOverlaps(obj) {
 			let overlapPlayers = this.players.some(player => this.overlap(obj, player))
-			let overlapPlanets = this.planets.some(planet => this.overlap(obj, planet))
+			// let overlapPlanets = this.planets.some(planet => this.overlap(obj, planet))
+			let overlapPlanets = this.planets.some(function(planet){
+				return this.overlap(obj, planet)
+			}.bind(this))
 			let overlapAsteroids = this.asteroidFields.some(af => this.overlap(obj, af))
 			let overlapSatellitesPlayer1 = this.players[0] && this.players[0].satellites.some(satellite => this.overlap(obj, satellite))
 			let overlapSatellitesPlayer2 = this.players[1] && this.players[1].satellites.some(satellite => this.overlap(obj, satellite))
@@ -127,35 +188,43 @@
 
 		drawObjects(objects) {
 			for (let object of objects) {
-				this.ctx.drawImage(object.object, object.x - object.size / 2, object.y - object.size / 2, object.size, object.size);
+				this.ctx.drawImage(object.object, object.x , object.y, object.size, object.size);
 			}
 		}
 
 		drawGalaxy() {
+			this.drawClip();
 			this.drawLines();
 			this.drawObjects(this.players)
 			this.drawObjects(this.planets)
 			this.drawObjects(this.asteroidFields)
 			this.drawObjects(this.players[0].satellites)
 			this.players[1] ? this.drawObjects(this.players[1].satellites) : null
-			//this.drawClip();
 		}
 		drawClip(){
-			this.ctx.beginPath();
+			// this.clearRect(0,0,window.innerWidth,window.innerHeight)
+			this.fillStyle = "black";
+			// this.ctx.beginPath();
+			this.ctx.globalCompositeOperation = "source-over"
 			this.drawOneElementClip(this.current_user);
+			this.ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
+			this.ctx.moveTo(0,0);
 			for(let satellite of this.current_user.satellites ){
 				this.drawOneElementClip(satellite);
 			}
-			this.ctx.globalCompositeOperation = 'destination-out';
-			this.fillStyle = "black";
+
+			this.ctx.globalCompositeOperation = 'xor';
 			this.ctx.fill();
-			this.ctx.globalCompositeOperation = 'source-over';
+			// this.closePath();
+
+			this.ctx.globalCompositeOperation = 'destination-over';
 		}
 		drawOneElementClip(object){
 			var distance = object.range;
 			if(distance == null)
 				distance = 150;
-			this.ctx.arc(object.x,object.y, distance/2, 0, Math.PI*2, false);
+			this.ctx.moveTo(object.x, object.y);
+			this.ctx.arc(object.x,object.y, distance, 0, Math.PI*2, false);
 		}
 		drawLines(){
 			for(let player of this.players){
@@ -168,10 +237,10 @@
 			for(let satellite of player.satellites){
 				var from = satellite.predessesor;
 				this.ctx.beginPath();
-				this.ctx.moveTo(from.x, from.y);
+				this.ctx.moveTo(from[0], from[1]);
 				this.ctx.lineTo(satellite.x, satellite.y);
-				this.ctx.stroke();
 				this.ctx.closePath();
+				this.ctx.stroke();
 			}
 		}
 		update_money() {
@@ -195,7 +264,6 @@
 			var mousePos = this.getMousePos(e);
 			var planetArray = this.Map.planets;
 			let hoveredPlanet = null
-			// let overlapPlanets = this.planets.some(planet => this.overlap({x:mousePos.x,y:mousePos.y,size:1}, planet))
 			let overlapPlanets = this.planets.some(function(planet){
 				let isPlanetOverlapped = this.overlap({x:mousePos.x,y:mousePos.y,size:1}, planet);
 				if(isPlanetOverlapped){
@@ -206,41 +274,24 @@
 			},this);
 				if (overlapPlanets) {
 					$("#planet_specs").attr("style", "");
-					$("#planet_specs").css("top",mousePos.y+"px");
+					$("#planet_specs").css("top",mousePos.y-hoveredPlanet.size+"px");
 					$("#planet_specs").css("left",mousePos.x+"px");
-					$("#planet_cost").html(hoveredPlanet.amount);
+					$("#planet_rate").html(hoveredPlanet.amount);
 					$("#sat_bonus").html(hoveredPlanet.sat);
-					 console.log("I'm on the planet!");
+					$("#flag_red").html(hoveredPlanet.flag2);
+					$("#flag_blue").html(hoveredPlanet.flag1);
 				} else {
 					$("#planet_specs").css("display","none");
 				}
-			// var onPlanet = function(planet) {
-			// 	let minX = planet.x - (planet.size/2);
-			// 	let maxX = planet.x + (planet.size/2);
-			// 	let minY = planet.y - (planet.size/2);
-			// 	let maxY = planet.y + (planet.size/2);
-			// 	//check if the mouse is currently over a planet
-			// 	if (mousePos.x > minX && mousePos.x < maxX && mousePos.y > minY && mousePos.y < maxY){
-			// 		$("#planet_specs").attr("style", "");
-			// 		$("#planet_specs").css("top",mousePos.y+"px");
-			// 		$("#planet_specs").css("left",mousePos.x+"px");
-			// 		$("#planet_cost").html(planet.amount);
-			// 		$("#sat_bonus").html(planet.sat);
-			// 		 console.log("I'm on the planet!");
-			// 	} else {
-			// 		$("#planet_specs").css("display","none");
-			// 	}
-			// }
-			// return planetArray.some(onPlanet);
 
 		}
 
 	}
 
 	class Map {
-		constructor(callback, gameObject) {
+		constructor(callback, gameObject,objects) {
 			this.game = gameObject
-			this.objects = createRandomMap(window.innerWidth, window.innerHeight, 1, 5, 3)
+			this.objects = objects
 			this.satellite_price = 100
 			this.flag_price = 700
 			this.loaded_images = 0
@@ -251,7 +302,12 @@
 			let satellite_link = this.game.current_user_index === 0 ? "img/stars/satellite-blue.svg" : "img/stars/satellite-red.svg"
 			this.otherObjects = [
 				{
-					img: satellite_link,
+					img: "img/stars/satellite-blue.svg",
+					size: 25,
+					range: 150
+				},
+				{
+					img: "img/stars/satellite-red.svg",
 					size: 25,
 					range: 150
 				}
@@ -285,5 +341,5 @@
 		}
 	}
 
-	window.onload = () => new Game();
+	// window.onload = () => new Game();
 })()

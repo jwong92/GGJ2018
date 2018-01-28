@@ -60,6 +60,7 @@ body {
 /* PLANET DETAILS */
 #planet_specs {
   position: absolute;
+  left: -10000px;
   display: inline-block;
   padding: 0.5em;
   font-size: 0.75rem;
@@ -68,8 +69,11 @@ body {
 }
 
 #planet_specs div {
-  /* display: inline-block; */
   margin: 0 3em;
+}
+
+#planet_specs img {
+  margin: 0.5em 1em 0;
 }
 
 #planet_specs h2 {
@@ -86,7 +90,7 @@ body {
   content: "   ";
 }
 
-#planet_cost::before {
+#planet_rate::before {
   content: "   $";
 }
 
