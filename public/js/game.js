@@ -176,9 +176,6 @@
 			let mousePos = this.getMousePos(e);
 
 			let satClose;
-			let currOwner = -1;
-			let newOwner = -1;
-			let rate;
 			let money = true;
 			let planet = true;
 
@@ -197,7 +194,7 @@
 			//Determine which satellite is closest to clicked
 			//currSat = boolean of if a satellite was close enough
 			if(overlapPlanets) {
-					this.current_user.satellites.some(function(satellite){
+					satClose=this.current_user.satellites.some(function(satellite){
 					let newSatDistance = this.satDistance(satellite, posX, posY)
 					if (newSatDistance <= satellite.range){
 						if (this.current_user.amount >= 400){
