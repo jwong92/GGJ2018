@@ -69,9 +69,11 @@
 			}
 		}
 		initListeners() {
-			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
+			$("#btn_sat").click(this.onClickBtnSat.bind(this));
+			$("#btn_flag").click(this.onClickBtnFlag.bind(this));
+			//this.canvas.addEventListener('click', this.placeSatellite.bind(this))
+			//this.canvas.addEventListener('click',this.setFlag.bind(this))
 			this.canvas.addEventListener('mousemove', this.showPlanetDetails.bind(this))
-			this.canvas.addEventListener('click',this.setFlag.bind(this))
 			document.getElementById('form').onsubmit=(ev)=>{
 				ev.preventDefault()
 				const message = document.getElementById('messageToOpponent').value
@@ -99,6 +101,14 @@
 				this.players[index].satellites=satellites
 			})
 		}
+		onClickBtnSat(){
+			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
+			this.canvas.removeEventListener('click',this.setFlag.bind(this))
+		}
+		onClickBtnFlag(){
+			this.canvas.addEventListener('click',this.setFlag.bind(this))
+			this.canvas.removeEventListener('click', this.placeSatellite.bind(this))
+		}
 		canPlaceSatellite(sat){
 			if(this.getDistanceBetween(sat,this.current_user)<=sat.range){
 				sat.predessesor = [this.current_user.x, this.current_user.y,this.current_user.size];
@@ -119,6 +129,7 @@
 			return distance
 		}
 		placeSatellite(e) {
+			this.canvas.removeEventListener('click', this.placeSatellite.bind(this));
 			var mousePos = this.getMousePos(e);
 
 			var sattelite = this.current_user_index===0?this.Map.otherObjects[0]:this.Map.otherObjects[1];
@@ -149,6 +160,7 @@
 		}
 
 		setFlag(e){
+			this.canvas.removeEventListener('click',this.setFlag.bind(this))
 			let posX = e.clientX+this.xOffset;
 			let posY = e.clientY+this.yOffset;
 			let overLappedPlanet = null;
