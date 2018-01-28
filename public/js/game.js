@@ -213,7 +213,7 @@
 					this.players[currOwner].rate -= overLappedPlanet.amount;
 				}
 				if(newOwner != -1){
-					// this.players[newOwner].rate += overLappedPlanet.amount;
+					this.players[newOwner].rate += overLappedPlanet.amount;
 				}
 			}
 		}
@@ -353,7 +353,7 @@
 				if (overlapPlanets) {
 					$("#planet_specs").attr("style", "");
 					$("#planet_specs").css("top",mousePos.y-this.yOffset-hoveredPlanet.size+"px");
-					$("#planet_specs").css("left",mousePos.x-this.xOffset+"px");
+					$("#planet_specs").css("left",mousePos.x-this.xOffset+5+"px");
 					$("#planet_rate").html(hoveredPlanet.amount);
 					$("#sat_bonus").html(hoveredPlanet.sat);
 					$("#flag_red").html(hoveredPlanet.flag2);
@@ -365,7 +365,6 @@
 		}
 
 	}
-
 	class Map {
 		constructor(callback, objects) {
 			this.objects = objects
