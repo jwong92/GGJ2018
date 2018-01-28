@@ -45,16 +45,16 @@ body {
   font-style: italic;
 }
 
-.costs span::before {
-  content: "$";
+.money span::before {
+  content: "$: ";
 }
 
 .sat span::before, .flag span::before {
   content: " : ";
 }
 
-#money {
-  font-size: 2rem;
+.money {
+  font-size: 1.75rem;
 }
 
 /* INSTRUCTIONS */

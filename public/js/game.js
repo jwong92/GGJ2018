@@ -35,7 +35,25 @@
 			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
 			this.canvas.addEventListener('click',this.getPosition.bind(this))
 		}
-
+		canPlaceSatellite(sat){
+			if(this.getDistanceBetween(sat,this.current_user)<=sat.range){
+				sat.predessesor = this.current_user;
+				return true
+			}
+			for (let satellite of this.current_user.satellites){
+				if(this.getDistanceBetween(sat,satellite)<=sat.range){
+					sat.predessesor = satellite;
+					return true
+				}
+			}
+			return false
+		}
+		getDistanceBetween(first,second){
+			const xDif = first.x-second.x
+			const yDif = first.y-second.y
+			const distance = Math.sqrt( xDif*xDif+ yDif*yDif );
+			return distance
+		}
 		placeSatellite(e) {
 			var mousePos = this.getMousePos(e);
 
@@ -46,12 +64,21 @@
 
 
 			// Check if cell is empty && (if we have the inventory OR the money)
-			if (!this.objectOverlaps(sat) && this.current_user.amount > this.Map.satellite_price) {
+			if (!this.objectOverlaps(sat) && this.canPlaceSatellite(sat) &&
+				(this.current_user.amount > this.Map.satellite_price || this.current_user.sat > 0)) {
 				this.current_user.satellites.push(sat);
-				this.Map.satellite_price *= 1.2;
+				if(this.current_user.sat > 0){
+					this.current_user.sat --;
+				}
+				else {
+					this.current_user.amount -= this.Map.satellite_price;
+					this.Map.satellite_price = Math.floor(this.Map.satellite_price * 1.2);
+				}
 
-				this.current_user.amount -= this.Map.satellite_price;
 
+
+
+				this.updateHud();
 			}
 			else {
 				//show something that we dont have money
@@ -144,20 +171,45 @@
 		}
 
 		drawGalaxy() {
+			this.drawLines();
 			this.drawObjects(this.players)
 			this.drawObjects(this.planets)
 			this.drawObjects(this.asteroidFields)
 			this.drawObjects(this.players[0].satellites)
 			this.players[1] ? this.drawObjects(this.players[1].satellites) : null
 		}
-
+		drawLines(){
+			for(let player of this.players){
+				this.drawLineForPlayer(player);
+			}
+		}
+		drawLineForPlayer(player){
+			this.ctx.lineWidth = "2";
+			this.ctx.strokeStyle = "red";
+			for(let satellite of player.satellites){
+				var from = satellite.predessesor;
+				this.ctx.beginPath();
+				this.ctx.moveTo(from.x, from.y);
+				this.ctx.lineTo(satellite.x, satellite.y);
+				this.ctx.stroke();
+				this.ctx.closePath();
+			}
+		}
 		update_money() {
 			this.current_user.amount += this.current_user.rate;
+			this.updateHud()
 		}
 
 		runGame() {
 			requestAnimationFrame(this.runGame.bind(this))
 			this.drawGalaxy()
+			this.updateHud()
+		}
+		updateHud() {
+			$("#money").html(this.current_user.amount)
+			$(".inv.sat span").html(this.current_user.sat)
+			$(".costs.sat span").html(this.Map.satellite_price)
+			$("#money_rate").html(this.current_user.rate)
 		}
 
 	}
