@@ -103,7 +103,11 @@
 			let posX = e.clientX
 			let posY = e.clientY
 			let overLappedPlanet = null;
-			let mousePos = this.getMousePos(e)
+			let mousePos = this.getMousePos(e);
+			let satClose;
+			let currOwner;
+			let newOwner;
+			let rate;
 
 			//Determine if planet clicked, and which planet was clicked
 			let overlapPlanets = this.planets.some(function(planet){
@@ -111,6 +115,14 @@
 				let isPlanetOverlapped = this.overlap(temp, planet)
 				if(isPlanetOverlapped){
 					overLappedPlanet = planet
+					if (planet.flag1 > planet.flag2) {
+						currOwner = 0;
+					}
+					else if(planet.flag1 < planet.flag2) {
+						currOwner = 1;
+					}
+					else
+						currOwner = -1;
 					return true
 				}
 				return false
@@ -120,17 +132,26 @@
 			//Determine which satellite is closest to clicked
 			//currSat = boolean of if a satellite was close enough
 			if(overlapPlanets) {
-				let satClose = this.current_user.satellites.some(function(satellite){
+					satClose = this.current_user.satellites.some(function(satellite){
 					let newSatDistance = this.satDistance(satellite, posX, posY)
 					if (newSatDistance <= satellite.range){
-						if (this.current_user.amount >= overLappedPlanet.amount){
+						if (this.current_user.amount >= 400){
 							if(this.current_user_index === 0) {
 								overLappedPlanet.flag1 += 1;
 							}
 							else {
 								overLappedPlanet.flag2 += 1;
 							}
-							this.current_user.amount -= overLappedPlanet.amount;
+							if(overLappedPlanet.flag1 > overLappedPlanet.flag2) {
+								newOwner = 0;
+							}
+							else if(overLappedPlanet.flag1 < overLappedPlanet.flag2){
+								newOwner = 1;
+							}
+							else {
+								newOwner = -1;
+							}
+							this.current_user.amount -= 400;
 						}
 						return true;
 					}
@@ -138,6 +159,14 @@
 						return false;
 					}
 				}.bind(this))
+			}
+			if(overLappedPlanet!= null){
+				if(currOwner != -1) {
+					this.players[currOwner].rate -= overLappedPlanet.amount;
+				}
+				if(newOwner != -1){
+					this.players[newOwner].rate += overLappedPlanet.amount;
+				}
 			}
 		}
 
