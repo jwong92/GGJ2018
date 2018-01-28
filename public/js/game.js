@@ -71,7 +71,7 @@
 		initListeners() {
 			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
 			this.canvas.addEventListener('mousemove', this.showPlanetDetails.bind(this))
-			this.canvas.addEventListener('click',this.getPosition.bind(this))
+			this.canvas.addEventListener('click',this.setFlag.bind(this))
 			document.getElementById('form').onsubmit=(ev)=>{
 				ev.preventDefault()
 				const message = document.getElementById('messageToOpponent').value
@@ -148,14 +148,14 @@
 
 		}
 
-		getPosition(e){
+		setFlag(e){
 			let posX = e.clientX
 			let posY = e.clientY
 			let overLappedPlanet = null;
 			let mousePos = this.getMousePos(e);
 			let satClose;
-			let currOwner;
-			let newOwner;
+			let currOwner = -1;
+			let newOwner = -1;
 			let rate;
 
 			//Determine if planet clicked, and which planet was clicked
@@ -200,7 +200,8 @@
 							else {
 								newOwner = -1;
 							}
-							this.current_user.amount -= 400;
+							// this.current_user.amount -= 400;
+							// this.current_user.sat += overLappedPlanet.sat;
 						}
 						return true;
 					}
