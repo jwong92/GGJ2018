@@ -44,6 +44,27 @@ body {
 	text-align: right;
 }
 
+.btn {
+  font-family: "Londrina Solid", arial, sans-serif;
+  font-size: 1rem;
+  background-color: rgb(124, 76, 130);
+  border-radius: 0.5em;
+  border: 0.1em solid rgb(68, 34, 75);
+  color: rgb(219, 219, 212);
+}
+
+.btn:hover {
+  color: rgb(205, 186, 43);
+  cursor: pointer;
+  /* background-color: rgb(119, 57, 126); */
+}
+
+.btn:active {
+  background-color: rgb(68, 34, 75);
+  border: 0.1em solid rgb(149, 101, 159);
+}
+
+
 #form{
   position: absolute;
   background-color: rgba(97, 89, 99, 0.55);
