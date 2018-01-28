@@ -140,7 +140,7 @@
 			return distance
 		}
 		placeSatellite(e) {
-			$('#space-game').unbind('click')
+			// $('#space-game').unbind('click')
 
 			var mousePos = this.getMousePos(e);
 
@@ -173,7 +173,7 @@
 		}
 
 		setFlag(e){
-			$('#space-game').unbind('click')
+			// $('#space-game').unbind('click')
 			let posX = e.clientX+this.xOffset;
 			let posY = e.clientY+this.yOffset;
 			let overLappedPlanet = null;
