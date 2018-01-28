@@ -1,5 +1,5 @@
 //variables we need to define
-var PlayerPlanetAmount = 700;
+var PlayerPlanetAmount = 10000;
 var StartingSatelites = 3;
 var SatelitesRange = 10;
 var asteroidsSize = 3;
@@ -49,7 +49,7 @@ function createRandomMap(width, height, players, planets, asteroids)
 				img = "img/planets/planet"+generateRandomBetween(2,7)+".svg";
 				var amt = Math.floor(Math.random() * (planetAmtRange[1] - planetAmtRange[0]) + planetAmtRange[0]);
 				var satNum = Math.floor(Math.random() * (satPerPlanetRange[1] - satPerPlanetRange[0]) + satPerPlanetRange[0]);
-				objects[i].push(new Planets(xy[0], xy[1], amt, satNum, img,size));
+				objects[i].push(new Planets(xy[0], xy[1], amt, satNum, img,size,j));
 			}
 			else if(i == 2){
 				img = "img/stars/asteroid.svg";
@@ -107,7 +107,7 @@ var startingRate = 20;
 
 
 //Planets
-function Planets(posX, posY, amt, satNum, img,size) {
+function Planets(posX, posY, amt, satNum, img,size,id) {
 	this.x = posX;
 	this.y = posY;
 	this.amount = amt;
@@ -116,6 +116,7 @@ function Planets(posX, posY, amt, satNum, img,size) {
 	this.flag1 = 0;
 	this.flag2 = 0;
 	this.size = size;
+	this.id = id;
 }
 
 //Satellites
