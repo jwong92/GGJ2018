@@ -50,10 +50,12 @@
 		}
 		canPlaceSatellite(sat){
 			if(this.getDistanceBetween(sat,this.current_user)<=sat.range){
+				sat.predessesor = this.current_user;
 				return true
 			}
 			for (let satellite of this.current_user.satellites){
 				if(this.getDistanceBetween(sat,satellite)<=sat.range){
+					sat.predessesor = satellite;
 					return true
 				}
 			}
@@ -143,13 +145,48 @@
 		}
 
 		drawGalaxy() {
+			this.drawLines();
 			this.drawObjects(this.players)
 			this.drawObjects(this.planets)
 			this.drawObjects(this.asteroidFields)
 			this.drawObjects(this.players[0].satellites)
 			this.players[1] ? this.drawObjects(this.players[1].satellites) : null
+			//this.drawClip();
 		}
-
+		drawClip(){
+			this.ctx.beginPath();
+			this.drawOneElementClip(this.current_user);
+			for(let satellite of this.current_user.satellites ){
+				this.drawOneElementClip(satellite);
+			}
+			this.ctx.globalCompositeOperation = 'destination-out';
+			this.fillStyle = "black";
+			this.ctx.fill();
+			this.ctx.globalCompositeOperation = 'source-over';
+		}
+		drawOneElementClip(object){
+			var distance = object.range;
+			if(distance == null)
+				distance = 150;
+			this.ctx.arc(object.x,object.y, distance/2, 0, Math.PI*2, false);
+		}
+		drawLines(){
+			for(let player of this.players){
+				this.drawLineForPlayer(player);
+			}
+		}
+		drawLineForPlayer(player){
+			this.ctx.lineWidth = "2";
+			this.ctx.strokeStyle = "red";
+			for(let satellite of player.satellites){
+				var from = satellite.predessesor;
+				this.ctx.beginPath();
+				this.ctx.moveTo(from.x, from.y);
+				this.ctx.lineTo(satellite.x, satellite.y);
+				this.ctx.stroke();
+				this.ctx.closePath();
+			}
+		}
 		update_money() {
 			this.current_user.amount += this.current_user.rate;
 			this.updateHud()
