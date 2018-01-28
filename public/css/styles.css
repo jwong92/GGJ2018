@@ -19,11 +19,23 @@ body {
   position: absolute;
   background-color: rgba(97, 89, 99, 0.85);
   top: 0;
-  right: 0;
+  left:10%;
+  /*right: 0;*/
   height: auto;
+  width:70%;
   padding: 1rem;
   text-align: left;
 }
+
+/* Andrei: add flex */
+.mother {
+	display:flex;
+}
+
+.kid {
+	flex:1;
+}
+
 #form{
   position: absolute;
   background-color: rgba(97, 89, 99, 0.55);
