@@ -149,8 +149,8 @@
 		}
 
 		setFlag(e){
-			let posX = e.clientX
-			let posY = e.clientY
+			let posX = e.clientX+this.xOffset;
+			let posY = e.clientY+this.yOffset;
 			let overLappedPlanet = null;
 			let mousePos = this.getMousePos(e);
 			let satClose;
@@ -200,8 +200,8 @@
 							else {
 								newOwner = -1;
 							}
-							// this.current_user.amount -= 400;
-							// this.current_user.sat += overLappedPlanet.sat;
+							this.current_user.amount -= 400;
+							this.current_user.sat += overLappedPlanet.sat;
 						}
 						return true;
 					}
