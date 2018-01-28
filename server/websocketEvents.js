@@ -39,8 +39,9 @@ function socketEvents(io) {
 		socket.on('satelites_changed', (satellites,userindex) => {
 			socket.broadcast.to(socket.roomId).emit('updateSatellites', userindex,satellites);
 		})
-		socket.on('send info',function (message) {
+		socket.on('send_info',function (message) {
 			socket.broadcast.to(socket.roomId).emit('resend_info', message);
+			socket.broadcast.emit('resend_info', message);
 		})
 		socket.on('disconnect', () => {
 			let closingRoom = rooms[socket.roomId]
