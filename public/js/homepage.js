@@ -74,7 +74,6 @@ for (var i=0; i<homepagePlanets; i++) {
   }//End stars
 
 //Create Planets
-
   //function for Hiding Splash Instructions on Start button click
   $("#start").click(function(){hideTarget(this.parentElement)});
   function hideTarget(target) {
