@@ -75,9 +75,6 @@
 					this.Map.satellite_price = Math.floor(this.Map.satellite_price * 1.2);
 				}
 
-
-
-
 				this.updateHud();
 			}
 			else {
@@ -89,8 +86,8 @@
 		getPosition(e){
 			let posX = e.clientX
 			let posY = e.clientY
+			let overLappedPlanet = null;
 			let mousePos = this.getMousePos(e)
-			let overLappedPlanet = null
 
 			//Determine if planet clicked, and which planet was clicked
 			let overlapPlanets = this.planets.some(function(planet){
@@ -105,22 +102,31 @@
 			}.bind(this))
 
 			//Determine which satellite is closest to clicked
-
-
+			//currSat = boolean of if a satellite was close enough
 			if(overlapPlanets) {
-				let distance = this.satDistance(overLappedPlanet, posX, posY)
-				console.log(distance);
+				let satClose = this.current_user.satellites.some(function(satellite){
+					let newSatDistance = this.satDistance(satellite, posX, posY)
+					if (newSatDistance <= satellite.range){
+						if (this.current_user.amount >= overLappedPlanet.amount){
+							if(this.current_user_index === 0) {
+								overLappedPlanet.flag1 += 1;
+							}
+							else {
+								overLappedPlanet.flag2 += 1;
+							}
+							this.current_user.amount -= overLappedPlanet.amount;
+						}
+						return true;
+					}
+					else {
+						return false;
+					}
+				}.bind(this))
 			}
-			//if planets overlap and its true
-			// if (overlapPlanets){
-				//check if flag is near the satellite
-				//check for money and update player
-				//determine the array of the clicked planet
-
 		}
 
 		satDistance(object, x, y) {
-				return Math.sqrt(Math.pow(object.x - x, 2) + Math.pow(object.y - y, 2));
+			return Math.sqrt(Math.pow(object.x - x, 2) + Math.pow(object.y - y, 2));
 		}
 
 		initCanvas(){
@@ -177,24 +183,6 @@
 			this.drawObjects(this.asteroidFields)
 			this.drawObjects(this.players[0].satellites)
 			this.players[1] ? this.drawObjects(this.players[1].satellites) : null
-			//this.drawClip();
-		}
-		drawClip(){
-			this.ctx.beginPath();
-			this.drawOneElementClip(this.current_user);
-			for(let satellite of this.current_user.satellites ){
-				this.drawOneElementClip(satellite);
-			}
-			this.ctx.globalCompositeOperation = 'destination-out';
-			this.fillStyle = "black";
-			this.ctx.fill();
-			this.ctx.globalCompositeOperation = 'source-over';
-		}
-		drawOneElementClip(object){
-			var distance = object.range;
-			if(distance == null)
-				distance = 150;
-			this.ctx.arc(object.x,object.y, distance/2, 0, Math.PI*2, false);
 		}
 		drawLines(){
 			for(let player of this.players){
