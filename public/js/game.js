@@ -107,11 +107,11 @@
 			});
 		}
 		onClickBtnSat(){
-			$('#space-game').unbind();
+			$('#space-game').unbind('click');
 			$('#space-game').bind('click', this.placeSatellite.bind(this))
 		}
 		onClickBtnFlag(){
-			$('#space-game').unbind();
+			$('#space-game').unbind('click');
 			$('#space-game').bind('click', this.setFlag.bind(this))
 		}
 		canPlaceSatellite(sat){
@@ -134,7 +134,7 @@
 			return distance
 		}
 		placeSatellite(e) {
-			$('#space-game').unbind()
+			$('#space-game').unbind('click')
 
 			var mousePos = this.getMousePos(e);
 
@@ -167,7 +167,7 @@
 		}
 
 		setFlag(e){
-			$('#space-game').unbind()
+			$('#space-game').unbind('click')
 			let posX = e.clientX+this.xOffset;
 			let posY = e.clientY+this.yOffset;
 			let overLappedPlanet = null;
