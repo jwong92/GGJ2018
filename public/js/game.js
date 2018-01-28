@@ -230,7 +230,7 @@
 			}
 			let dominance = [counter[0]/this.planets.length, counter[1]/this.planets.length];
 			if(dominance[0]<=0.5 && dominance[1]<=.5)
-				return;
+				return counter;
 			alert(this.getfinalMessage(dominance))
 		}
 		getownerIndex(planet){
