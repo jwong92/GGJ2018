@@ -147,8 +147,8 @@
 		updateHud() {
 			$("#money").html(this.current_user.amount)
 			$(".inv.sat span").html(this.current_user.sat)
-			$(".costs.sat span").html(Map.satellite_price)
-
+			$(".costs.sat span").html(this.Map.satellite_price)
+			$("#money_rate").html(this.current_user.rate)
 		}
 
 	}
