@@ -4,9 +4,23 @@
 	const socket = io("https://galaxy-control.herokuapp.com");
 	window.send = send
 	socket.on('resend_info', (mess) => alert(mess));
-	socket.emit('get_room', function (response) {
-		console.log(response)
+	socket.on('end game', (mess) => {
+		alert(mess)
+		window.location('/')
 	});
+	let app=null
+	document.getElementById('start').addEventListener('click',function () {
+		socket.emit('get_room', function (objects,index) {
+			app =new Game(objects,index)
+		});
+	})
+	socket.on('updateSatellites',function (index,satellites) {
+		var enemySattelite = app.current_user_index===0?app.Map.otherObjects[1]:app.Map.otherObjects[0];
+		satellites.forEach((satellite)=>{
+			satellite.object=enemySattelite.object
+		})
+		app.players[index].satellites=satellites
+	})
 
 	function send(message) {
 		socket.emit('send_info', message)
@@ -14,16 +28,16 @@
 
 	class Game {
 
-		constructor() {
+		constructor(objects,index) {
 			this.loaded_images = 0
-			this.current_user_index = 0
+			this.current_user_index = index
+			this.Map = new Map(this.runGame.bind(this), this,objects)
 			this.init()
 		}
 
 		init() {
 			this.initCanvas()
 			this.initListeners()
-			this.Map = new Map(this.runGame.bind(this), this)
 			this.players = this.Map.players
 			this.planets = this.Map.planets
 			this.asteroidFields = this.Map.asteroidFields
@@ -54,7 +68,7 @@
 		placeSatellite(e) {
 			var mousePos = this.getMousePos(e);
 
-			var sattelite = this.Map.otherObjects[0];
+			var sattelite = this.current_user_index===0?this.Map.otherObjects[0]:this.Map.otherObjects[1];
 			var sat = new Satellites(mousePos.x, mousePos.y, sattelite.range);
 			sat.size = sattelite.size
 			sat.object = sattelite.object
@@ -64,6 +78,7 @@
 			if (!this.objectOverlaps(sat) && this.canPlaceSatellite(sat) &&
 				(this.current_user.amount > this.Map.satellite_price || this.current_user.sat > 0)) {
 				this.current_user.satellites.push(sat);
+				socket.emit('satelites_changed',this.current_user.satellites,this.current_user_index)
 				if(this.current_user.sat > 0){
 					this.current_user.sat --;
 				}
@@ -155,9 +170,9 @@
 	}
 
 	class Map {
-		constructor(callback, gameObject) {
+		constructor(callback, gameObject,objects) {
 			this.game = gameObject
-			this.objects = createRandomMap(window.innerWidth, window.innerHeight, 1, 5, 3)
+			this.objects = objects
 			this.satellite_price = 100
 			this.flag_price = 700
 			this.loaded_images = 0
@@ -168,7 +183,12 @@
 			let satellite_link = this.game.current_user_index === 0 ? "img/stars/satellite-blue.svg" : "img/stars/satellite-red.svg"
 			this.otherObjects = [
 				{
-					img: satellite_link,
+					img: "img/stars/satellite-blue.svg",
+					size: 25,
+					range: 150
+				},
+				{
+					img: "img/stars/satellite-red.svg",
 					size: 25,
 					range: 150
 				}
@@ -202,5 +222,5 @@
 		}
 	}
 
-	window.onload = () => new Game();
+	// window.onload = () => new Game();
 })()
