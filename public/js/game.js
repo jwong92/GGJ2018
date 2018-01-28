@@ -327,7 +327,7 @@
 		}
 		drawGalaxy() {
 			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-			// this.drawClip();
+			this.drawClip();
 			this.drawLines();
 			this.drawObjects(this.players)
 			this.drawObjects(this.planets)
