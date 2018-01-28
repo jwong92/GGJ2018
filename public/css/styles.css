@@ -21,9 +21,9 @@ body {
   top: 0;
   left:10%;
   /*right: 0;*/
-  height: auto;
+  height: 50px;
   width:70%;
-  padding: 1rem;
+  padding: 0.5rem;
   text-align: left;
 }
 
@@ -34,6 +34,14 @@ body {
 
 .kid {
 	flex:1;
+}
+
+.kid-large {
+	flex:1.5;
+}
+
+.right {
+	text-align: right;
 }
 
 #form{
@@ -67,21 +75,22 @@ body {
   font-size:1.5rem;
 }
 #hud h2 {
-  margin-top: 2rem;
+  /*margin-top: 2rem;*/
+  margin:0;
 }
 
 #hud img {
   height: 2rem;
   width: auto;
-  margin: 0.5rem auto;
+  margin: 0 auto;
 }
 
 .inv {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 .costs {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-style: italic;
 }
 
@@ -94,7 +103,8 @@ body {
 }
 
 .money {
-  font-size: 1.75rem;
+  font-size: 1.2rem;
+  padding-top:5px;
 }
 
 /* PLANET DETAILS */
