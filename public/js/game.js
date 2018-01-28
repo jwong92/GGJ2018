@@ -27,6 +27,11 @@
 			this.defaultOffset=30
 			this.xOffset=this.current_user.x>1000?this.Map.globalWidth-this.canvas.width:0
 			this.yOffset=this.current_user.y>1000?this.Map.globalHeight-this.canvas.height:0
+			console.log(this.current_user_index);
+			if(this.current_user_index === 0){
+				$(".sat").attr("src", "img/stars/satellite-blue.svg");
+				$(".flag").attr("src", "img/flags/flag-blue.svg");
+			}
 		}
 		manageKeys(key, ev) {
 			switch (key) {
