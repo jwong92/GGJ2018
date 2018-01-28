@@ -25,7 +25,7 @@ function socketEvents(io) {
 			}
 
 			if (!connected) {
-				const objects = mapGenerator(2000, 2000, 2, 25, 13)
+				const objects = mapGenerator(2000, 2000, 2, 25, 20)
 				let newRoom = {id: rooms.length, participants: [socket], objects}
 				socket.roomId = newRoom.id
 				rooms.push(newRoom)

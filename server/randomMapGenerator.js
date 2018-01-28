@@ -4,7 +4,7 @@ var StartingSatelites = 3;
 var SatelitesRange = 10;
 var asteroidsSize = 3;
 // sizes ranges for players, planets and android fields
-var sizes = [[60, 80], [60, 80], [50,60]];
+var sizes = [[60, 80], [60, 80], [80,200]];
 // amt ranges for planets
 var planetAmtRange = [15, 30];
 // range of satelites per planet
