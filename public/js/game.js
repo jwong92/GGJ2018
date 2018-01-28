@@ -6,7 +6,7 @@
 	socket.on('resend_info', (mess) => alert(mess));
 	socket.on('end game', (mess) => {
 		alert(mess)
-		window.location.href = '/public'
+		window.location.href = window.location.href
 	});
 	let app=null
 	document.getElementById('start').addEventListener('click',function () {
@@ -31,7 +31,7 @@
 		constructor(objects,index) {
 			this.loaded_images = 0
 			this.current_user_index = index
-			this.Map = new Map(this.runGame.bind(this), this,objects)
+			this.Map = new Map(this.runGame.bind(this),objects)
 			this.init()
 		}
 
@@ -43,21 +43,56 @@
 			this.asteroidFields = this.Map.asteroidFields
 			this.satellites = []
 			this.current_user = this.players[this.current_user_index]
+			this.defaultOffset=30
+			this.xOffset=this.current_user.x>1000?this.Map.globalWidth-this.canvas.width:0
+			this.yOffset=this.current_user.y>1000?this.Map.globalHeight-this.canvas.height:0
 		}
-
+		manageKeys(key, ev) {
+			ev.preventDefault()
+			switch (key) {
+				case 37:
+				case 65:
+				case 'left':
+					if(this.xOffset<=0)return
+					this.xOffset-=this.defaultOffset
+					break;
+				case 38:
+				case 87:
+				case 'up':
+					if(this.yOffset<=0)return
+					this.yOffset-=this.defaultOffset
+					break;
+				case 39:
+				case 68:
+				case 'right':
+					if(this.xOffset>=this.Map.globalWidth-this.canvas.width)return
+					this.xOffset+=this.defaultOffset
+					break;
+				case 40:
+				case 83:
+				case 'down':
+					if(this.yOffset>=this.Map.globalHeight-this.canvas.height)return
+					this.yOffset+=this.defaultOffset
+					break;
+			}
+		}
 		initListeners() {
 			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
 			this.canvas.addEventListener('mousemove', this.showPlanetDetails.bind(this))
 			this.canvas.addEventListener('click',this.getPosition.bind(this))
+			document.addEventListener('keydown',(ev) =>{
+				let key = ev.keyCode;
+				this.manageKeys(key, ev)
+			})
 		}
 		canPlaceSatellite(sat){
 			if(this.getDistanceBetween(sat,this.current_user)<=sat.range){
-				sat.predessesor = [this.current_user.x, this.current_user.y];
+				sat.predessesor = [this.current_user.x, this.current_user.y,this.current_user.size];
 				return true
 			}
 			for (let satellite of this.current_user.satellites){
 				if(this.getDistanceBetween(sat,satellite)<=sat.range){
-					sat.predessesor = [satellite.x, satellite.y];
+					sat.predessesor = [satellite.x, satellite.y,satellite.size];
 					return true
 				}
 			}
@@ -177,8 +212,8 @@
 		initCanvas(){
 			this.canvas = document.getElementById('space-game')
 			this.ctx = this.canvas.getContext('2d');
-			this.canvas.width = window.innerWidth;
-			this.canvas.height = window.innerHeight;
+			this.canvas.width = this.canvas.clientWidth;
+			this.canvas.height =  this.canvas.clientHeight;
 			this.money_updater = setInterval(this.update_money.bind(this), 10000);
 		}
 
@@ -210,18 +245,19 @@
 		getMousePos(evt) {
 			var rect = this.canvas.getBoundingClientRect();
 			return {
-				x: evt.clientX - rect.left,
-				y: evt.clientY - rect.top
+				x: evt.clientX - rect.left+this.xOffset,
+				y: evt.clientY - rect.top+this.yOffset
 			};
 		}
 
 		drawObjects(objects) {
 			for (let object of objects) {
-				this.ctx.drawImage(object.object, object.x , object.y, object.size, object.size);
+				this.ctx.drawImage(object.object, object.x-this.xOffset , object.y-this.yOffset, object.size, object.size);
 			}
 		}
 
 		drawGalaxy() {
+			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 			this.drawClip();
 			this.drawLines();
 			this.drawObjects(this.players)
@@ -236,7 +272,7 @@
 			// this.ctx.beginPath();
 			this.ctx.globalCompositeOperation = "source-over"
 			this.drawOneElementClip(this.current_user);
-			this.ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
+			this.ctx.fillRect(0,0,this.Map.globalWidth,this.Map.globalHeight);
 			this.ctx.moveTo(0,0);
 			for(let satellite of this.current_user.satellites ){
 				this.drawOneElementClip(satellite);
@@ -252,8 +288,8 @@
 			var distance = object.range;
 			if(distance == null)
 				distance = 150;
-			this.ctx.moveTo(object.x, object.y);
-			this.ctx.arc(object.x,object.y, distance, 0, Math.PI*2, false);
+			this.ctx.moveTo(object.x-this.xOffset, object.y-this.yOffset);
+			this.ctx.arc(object.x-this.xOffset,object.y-this.yOffset, distance, 0, Math.PI*2, false);
 		}
 		drawLines(){
 			for(let player of this.players){
@@ -266,8 +302,8 @@
 			for(let satellite of player.satellites){
 				var from = satellite.predessesor;
 				this.ctx.beginPath();
-				this.ctx.moveTo(from[0], from[1]);
-				this.ctx.lineTo(satellite.x, satellite.y);
+				this.ctx.moveTo(from[0]+from[2]/2-this.xOffset, from[1]+from[2]/2-this.yOffset);
+				this.ctx.lineTo(satellite.x+satellite.size/2-this.xOffset, satellite.y+satellite.size/2-this.yOffset);
 				this.ctx.closePath();
 				this.ctx.stroke();
 			}
@@ -318,8 +354,7 @@
 	}
 
 	class Map {
-		constructor(callback, gameObject,objects) {
-			this.game = gameObject
+		constructor(callback, objects) {
 			this.objects = objects
 			this.satellite_price = 100
 			this.flag_price = 700
@@ -328,7 +363,8 @@
 			this.players = this.objects[0]
 			this.planets = this.objects[1]
 			this.asteroidFields = this.objects[2]
-			let satellite_link = this.game.current_user_index === 0 ? "img/stars/satellite-blue.svg" : "img/stars/satellite-red.svg"
+			this.globalWidth = this.objects[4][0]
+			this.globalHeight = this.objects[4][1]
 			this.otherObjects = [
 				{
 					img: "img/stars/satellite-blue.svg",

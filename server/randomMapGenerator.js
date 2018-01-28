@@ -57,6 +57,7 @@ function createRandomMap(width, height, players, planets, asteroids)
 			}
 		}
 	}
+	objects[4]=[width,height]
 	//we return an array of arrays
 	return objects;
 }
