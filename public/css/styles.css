@@ -51,6 +51,7 @@ body {
   border-radius: 0.5em;
   border: 0.1em solid rgb(68, 34, 75);
   color: rgb(219, 219, 212);
+  margin: 0 0.75em;
 }
 
 .btn:hover {

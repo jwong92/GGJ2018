@@ -27,6 +27,7 @@
 			this.defaultOffset=30
 			this.xOffset=this.current_user.x>1000?this.Map.globalWidth-this.canvas.width:0
 			this.yOffset=this.current_user.y>1000?this.Map.globalHeight-this.canvas.height:0
+			this.scoreCounter()
 		}
 		manageKeys(key, ev) {
 			switch (key) {
@@ -229,9 +230,10 @@
 					counter[index]++;
 			}
 			let dominance = [counter[0]/this.planets.length, counter[1]/this.planets.length];
-			if(dominance[0]<=0.5 && dominance[1]<=.5)
-				return counter;
-			alert(this.getfinalMessage(dominance))
+			if(!(dominance[0]<=0.5 && dominance[1]<=.5)){
+				alert(this.getfinalMessage(dominance))
+			}
+			return counter;
 		}
 		getownerIndex(planet){
 			if(planet.flag1 > planet.flag2)
@@ -423,10 +425,20 @@
 				} else {
 					$("#planet_specs").css("display","none");
 				}
+		}//end of showPlanetDetails
+		scoreCounter() {
+			let planets = this.Map.planets;
+			let counterArray = this.checkWinner();
+			$("#planet_total").html(planets.length);
+			if (this.current_user_index === 0){
+				$("#user_score").html(counterArray[0]);
+			} else {
+				$("#user_score").html(counterArray[1]);
+			}
+		}//end of scoreCounter
 
-		}
 
-	}
+	}//end of Game class
 	class Map {
 		constructor(callback, objects) {
 			this.objects = objects
