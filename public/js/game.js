@@ -9,7 +9,12 @@
 			app =new Game(objects,index)
 		});
 	})
-
+	socket.on('resend_info', (mess) => {
+		let messageElem =$("#messageFromOpponent")
+		messageElem.fadeIn()
+		messageElem.text(mess)
+		messageElem.fadeOut(5000)
+	});
 	class Game {
 
 		constructor(objects,index) {
@@ -78,14 +83,10 @@
 			}
 			document.addEventListener('keydown',(ev) =>{
 				let key = ev.keyCode;
+				if(ev.target.id==="messageToOpponent") return
 				this.manageKeys(key, ev)
 			})
-			socket.on('resend_info', (mess) => {
-				let messageElem =$("#messageFromOpponent")
-				messageElem.fadeIn()
-				messageElem.val(mess)
-				messageElem.fadeOut( "slow")
-			});
+
 			socket.on('end game', (mess) => {
 				alert(mess)
 				window.location.href = window.location.href
@@ -271,7 +272,7 @@
 
 		drawGalaxy() {
 			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-			this.drawClip();
+			// this.drawClip();
 			this.drawLines();
 			this.drawObjects(this.players)
 			this.drawObjects(this.planets)
