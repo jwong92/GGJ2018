@@ -1,7 +1,7 @@
 (function () {
 	"use strict"
 	const socket = io("http://localhost:5000");
-	// const socket = io("https://galaxy-control.herokuapp.com");
+	 // const socket = io("https://galaxy-control.herokuapp.com");
 	document.getElementById('start').addEventListener('click',function () {
 		socket.emit('get_room', function (objects,index) {
 			new Game(objects,index)
@@ -61,9 +61,11 @@
 			}
 		}
 		initListeners() {
-			this.canvas.addEventListener('click', this.placeSatellite.bind(this))
+			$("#btn_sat").click(this.onClickBtnSat.bind(this));
+			$("#btn_flag").click(this.onClickBtnFlag.bind(this));
+			//this.canvas.addEventListener('click', this.placeSatellite.bind(this))
+			//this.canvas.addEventListener('click',this.setFlag.bind(this))
 			this.canvas.addEventListener('mousemove', this.showPlanetDetails.bind(this))
-			this.canvas.addEventListener('click',this.setFlag.bind(this))
 			document.getElementById('form').onsubmit=(ev)=>{
 				ev.preventDefault()
 				const message = document.getElementById('messageToOpponent').value
@@ -106,6 +108,14 @@
 
 			});
 		}
+		onClickBtnSat(){
+			$('#space-game').unbind();
+			$('#space-game').bind('click', this.placeSatellite.bind(this))
+		}
+		onClickBtnFlag(){
+			$('#space-game').unbind();
+			$('#space-game').bind('click', this.setFlag.bind(this))
+		}
 		canPlaceSatellite(sat){
 			if(this.getDistanceBetween(sat,this.current_user)<=sat.range){
 				sat.predessesor = [this.current_user.x, this.current_user.y,this.current_user.size];
@@ -126,6 +136,8 @@
 			return distance
 		}
 		placeSatellite(e) {
+			$('#space-game').unbind()
+			
 			var mousePos = this.getMousePos(e);
 
 			var sattelite = this.current_user_index===0?this.Map.otherObjects[0]:this.Map.otherObjects[1];
@@ -133,6 +145,7 @@
 			sat.size = sattelite.size
 			sat.object = sattelite.object
 
+			this.showMssg(!this.canPlaceSatellite(sat),"You cannot place a satellite here");
 
 			// Check if cell is empty && (if we have the inventory OR the money)
 			if (!this.objectOverlaps(sat) && this.canPlaceSatellite(sat) &&
@@ -156,10 +169,18 @@
 		}
 
 		setFlag(e){
+			$('#space-game').unbind()
 			let posX = e.clientX+this.xOffset;
 			let posY = e.clientY+this.yOffset;
 			let overLappedPlanet = null;
 			let mousePos = this.getMousePos(e);
+
+			let satClose;
+			let currOwner = -1;
+			let newOwner = -1;
+			let rate;
+			let money = true;
+			let planet = true;
 
 			//Determine if planet clicked, and which planet was clicked
 			let overlapPlanets = this.planets.some(function(planet){
@@ -187,9 +208,12 @@
 							else {
 								overLappedPlanet.flag2 += 1;
 								socket.emit('planet_flags_changed',{planetId:overLappedPlanet.id,flag2:overLappedPlanet.flag2})
+								this.showMssg(planet, "You just gained a planet");
 							}
 							this.current_user.amount -= 400;
 							this.current_user.sat += overLappedPlanet.sat;
+						} else {
+							this.showMssg(money, "You don't have enough money");
 						}
 						return true;
 					}
@@ -197,11 +221,21 @@
 						return false;
 					}
 				}.bind(this))
+				this.showMssg(!satClose, "Your satellite is out of range");
 			}
 		}
-
 		satDistance(object, x, y) {
 			return Math.sqrt(Math.pow(object.x - x, 2) + Math.pow(object.y - y, 2));
+		}
+
+		showMssg(specifics, mssg){
+			//if you don't have enough money
+			if(specifics) {
+				//show the box and write html
+				$("#message").html(mssg);
+				$("#mssgBox").css("display", "inherit");
+				$("#mssgBox").fadeOut(1100);
+			}
 		}
 
 		initCanvas(){

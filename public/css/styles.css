@@ -19,11 +19,31 @@ body {
   position: absolute;
   background-color: rgba(97, 89, 99, 0.85);
   top: 0;
-  right: 0;
-  height: auto;
-  padding: 1rem;
+  left:10%;
+  /*right: 0;*/
+  height: 50px;
+  width:70%;
+  padding: 0.5rem;
   text-align: left;
 }
+
+/* Andrei: add flex */
+.mother {
+	display:flex;
+}
+
+.kid {
+	flex:1;
+}
+
+.kid-large {
+	flex:1.5;
+}
+
+.right {
+	text-align: right;
+}
+
 #form{
   position: absolute;
   background-color: rgba(97, 89, 99, 0.55);
@@ -55,21 +75,22 @@ body {
   font-size:1.5rem;
 }
 #hud h2 {
-  margin-top: 2rem;
+  /*margin-top: 2rem;*/
+  margin:0;
 }
 
 #hud img {
   height: 2rem;
   width: auto;
-  margin: 0.5rem auto;
+  margin: 0 auto;
 }
 
 .inv {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 .costs {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-style: italic;
 }
 
@@ -82,7 +103,8 @@ body {
 }
 
 .money {
-  font-size: 1.75rem;
+  font-size: 1.2rem;
+  padding-top:5px;
 }
 
 /* PLANET DETAILS */
@@ -210,6 +232,26 @@ img {
   position: absolute;
 }
 
+/*  */
+#mssgBox {
+  position: absolute;
+  display: none;
+  height: 10rem;
+  width: 20rem;
+  background-color: rgba(255, 255, 255, 0.76);
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid #000;
+}
+
+#message {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
 @keyframes rotate {
     0% {
