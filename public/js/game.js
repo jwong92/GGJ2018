@@ -6,7 +6,7 @@
 	socket.on('resend_info', (mess) => alert(mess));
 	socket.on('end game', (mess) => {
 		alert(mess)
-		window.location('/')
+		window.location.href = '/'
 	});
 	let app=null
 	document.getElementById('start').addEventListener('click',function () {
