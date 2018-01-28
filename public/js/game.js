@@ -421,8 +421,13 @@
 			},this);
 				if (overlapPlanets) {
 					$("#planet_specs").attr("style", "");
+
+					if(this.isNearRightEdgeOfScreen(e)) {
+						$("#planet_specs").css("left",mousePos.x-this.xOffset-200+"px");
+					} else {
+						$("#planet_specs").css("left",mousePos.x-this.xOffset+5+"px");
+					}
 					$("#planet_specs").css("top",mousePos.y-this.yOffset-hoveredPlanet.size+"px");
-					$("#planet_specs").css("left",mousePos.x-this.xOffset+5+"px");
 					$("#planet_rate").html(hoveredPlanet.amount);
 					$("#sat_bonus").html(hoveredPlanet.sat);
 					$("#flag_red").html(hoveredPlanet.flag2);
@@ -442,6 +447,18 @@
 			}
 		}//end of scoreCounter
 
+		isNearRightEdgeOfScreen(e){
+		  var mousePosX = this.getMousePos(e).x-this.xOffset;
+		  var endOfScreenX = window.innerWidth;
+		  let distance = endOfScreenX - mousePosX;
+
+		  if(distance < 175) {
+		    return true;
+		  }
+		  else {
+		    return false;
+		  }
+		}
 
 	}//end of Game class
 	class Map {
