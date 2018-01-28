@@ -218,6 +218,34 @@
 				}.bind(this))
 				this.showMssg(!satClose, "Your satellite is out of range");
 			}
+			this.checkWinner();
+		}
+		checkWinner(){
+			let counter = [0,0];
+			let message = ""
+			for(let planet of this.planets){
+				let index = this.getownerIndex(planet);
+				if(index != -1)
+					counter[index]++;
+			}
+			let dominance = [counter[0]/this.planets.length, counter[1]/this.planets.length];
+			if(dominance[0]<=0.5 && dominance[1]<=.5)
+				return;
+			alert(this.getfinalMessage(dominance))
+		}
+		getownerIndex(planet){
+			if(planet.flag1 > planet.flag2)
+				return 0;
+			if(planet.flag2 > planet.flag2)
+				return 1;
+			return -1;
+		}
+		getfinalMessage(dominance)
+		{
+			if(dominance[this.current_user_index]>.5)
+				return "you win!";
+			else
+				return "you loose"
 		}
 		satDistance(object, x, y) {
 			return Math.sqrt(Math.pow(object.x - x, 2) + Math.pow(object.y - y, 2));
