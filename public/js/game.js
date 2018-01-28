@@ -27,6 +27,11 @@
 			this.defaultOffset=30
 			this.xOffset=this.current_user.x>1000?this.Map.globalWidth-this.canvas.width:0
 			this.yOffset=this.current_user.y>1000?this.Map.globalHeight-this.canvas.height:0
+			console.log(this.current_user_index);
+			if(this.current_user_index === 0){
+				$(".sat").attr("src", "img/stars/satellite-blue.svg");
+				$(".flag").attr("src", "img/flags/flag-blue.svg");
+			}
 			this.scoreCounter()
 		}
 		manageKeys(key, ev) {
@@ -108,11 +113,11 @@
 			});
 		}
 		onClickBtnSat(){
-			$('#space-game').unbind();
+			$('#space-game').unbind('click');
 			$('#space-game').bind('click', this.placeSatellite.bind(this))
 		}
 		onClickBtnFlag(){
-			$('#space-game').unbind();
+			$('#space-game').unbind('click');
 			$('#space-game').bind('click', this.setFlag.bind(this))
 		}
 		canPlaceSatellite(sat){
@@ -135,7 +140,7 @@
 			return distance
 		}
 		placeSatellite(e) {
-			$('#space-game').unbind()
+			$('#space-game').unbind('click')
 
 			var mousePos = this.getMousePos(e);
 
@@ -168,7 +173,7 @@
 		}
 
 		setFlag(e){
-			$('#space-game').unbind()
+			$('#space-game').unbind('click')
 			let posX = e.clientX+this.xOffset;
 			let posY = e.clientY+this.yOffset;
 			let overLappedPlanet = null;

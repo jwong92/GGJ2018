@@ -99,6 +99,8 @@ body {
 #hud h2 {
   /*margin-top: 2rem;*/
   margin:0;
+  color: #ff9f4f;
+  padding-left: 0.5rem;
 }
 
 #hud img {
@@ -108,20 +110,29 @@ body {
 }
 
 .inv {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .costs {
   font-size: 1.5rem;
   font-style: italic;
+  display: flex;
 }
 
 .money span::before {
   content: "$: ";
+  color: #db5419;
+}
+#money_rate::before{
+  content: "+$: ";
+  color: #db5419;
 }
 
 .sat span::before, .flag span::before {
   content: " : ";
+}
+.sat span{
+  vertical-align: super;
 }
 
 .money {
