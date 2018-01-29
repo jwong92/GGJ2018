@@ -112,9 +112,9 @@
 			})
 			socket.on('resend_info', (mess) => {
 				let messageElem = $("#messageFromOpponent")
-				messageElem.fadeIn()
+				messageElem.fadeIn(100)
 				messageElem.text(mess)
-				messageElem.fadeOut(5000)
+				messageElem.fadeOut(7000)
 			});
 			socket.on('planet_flags_update', (planet) => {
 				const updatedPlanet = this.planets.find((pl) => pl.id === planet.planetId)
