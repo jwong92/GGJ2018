@@ -225,7 +225,7 @@
 					let newSatDistance = this.satDistance(satellite, posX, posY)
 					if (newSatDistance <= satellite.range) {
 						if (this.current_user.amount >= 400) {
-							if(overLappedPlanet.flag1===0&&overLappedPlanet.flag1===0){
+							if(overLappedPlanet.flag1===0&&overLappedPlanet.flag2===0){
 								this.current_user.sat += overLappedPlanet.sat;
 							}
 							if (this.current_user_index === 0) {
@@ -348,7 +348,13 @@
 
 		drawObjects(objects) {
 			for (let object of objects) {
-				this.ctx.drawImage(object.object, object.x - this.xOffset, object.y - this.yOffset, object.size, object.size);
+				let objectVisibleCoords = {x:object.x - this.xOffset,y:object.y - this.yOffset,size:object.size}
+				let isVisible = objectVisibleCoords.x + objectVisibleCoords.size > 0 &&
+				objectVisibleCoords.x < (this.canvas.width) &&
+				objectVisibleCoords.y + objectVisibleCoords.size > 0 &&
+				objectVisibleCoords.y < (this.canvas.height)
+				if(isVisible)
+				this.ctx.drawImage(object.object,objectVisibleCoords.x ,objectVisibleCoords.y , object.size, object.size);
 			}
 		}
 
