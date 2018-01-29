@@ -87,7 +87,7 @@
 
 			socket.on('end game', (mess) => {
 				alert(mess)
-				// window.location.href = window.location.href
+				window.location.href = window.location.href
 			});
 			socket.on('updateSatellites',(index,satellites) =>{
 				var enemySattelite = this.current_user_index===0?this.Map.otherObjects[1]:this.Map.otherObjects[0];

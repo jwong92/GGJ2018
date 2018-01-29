@@ -18,7 +18,6 @@ function socketEvents(io) {
 					let index = room.participants.push(socket)-1
 					socket.join(room.id);
 					socket.roomId = room.id
-					// io.sockets.in(room.id).emit('gameInfo', ['cool stuff']);
 					callback(room.objects,index)
 				}
 
@@ -44,7 +43,6 @@ function socketEvents(io) {
 		})
 		socket.on('send_info',function (message) {
 			socket.broadcast.to(socket.roomId).emit('resend_info', message);
-			socket.broadcast.emit('resend_info', message);
 		})
 		socket.on('disconnect', () => {
 			let closingRoom = rooms[socket.roomId]
@@ -56,8 +54,9 @@ function socketEvents(io) {
 				}
 				return s.id === socket.id
 			})
-			closingRoom.participants.splice(loserIndex,1)
+			let roomIndex = rooms.indexOf(closingRoom)
 			socket.broadcast.to(closingRoom.id).emit('end game', `You won since your opponent has left`);
+			rooms.splice(roomIndex,1)
 		})
 	});
 }
