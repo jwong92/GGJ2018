@@ -104,7 +104,7 @@
 				window.location.href = window.location.href
 			});
 			socket.on('updateSatellites', (index, satellites) => {
-				var enemySattelite = this.current_user_index === 0 ? this.Map.otherObjects[1] : this.Map.otherObjects[0];
+				const enemySattelite = this.current_user_index === 0 ? this.Map.otherObjects[1] : this.Map.otherObjects[0];
 				satellites.forEach((satellite) => {
 					satellite.object = enemySattelite.object
 				})
@@ -165,10 +165,10 @@
 		placeSatellite(e) {
 			// $('#space-game').unbind('click')
 
-			var mousePos = this.getMousePos(e);
+			const mousePos = this.getMousePos(e);
 
-			var sattelite = this.current_user_index === 0 ? this.Map.otherObjects[0] : this.Map.otherObjects[1];
-			var sat = new Satellites(mousePos.x, mousePos.y, sattelite.range);
+			const sattelite = this.current_user_index === 0 ? this.Map.otherObjects[0] : this.Map.otherObjects[1];
+			const sat = new Satellites(mousePos.x, mousePos.y, sattelite.range);
 			sat.size = sattelite.size
 			sat.object = sattelite.object
 
@@ -225,6 +225,9 @@
 					let newSatDistance = this.satDistance(satellite, posX, posY)
 					if (newSatDistance <= satellite.range) {
 						if (this.current_user.amount >= 400) {
+							if(overLappedPlanet.flag1===0&&overLappedPlanet.flag1===0){
+								this.current_user.sat += overLappedPlanet.sat;
+							}
 							if (this.current_user_index === 0) {
 								overLappedPlanet.flag1 += 1;
 								socket.emit('planet_flags_changed', {
@@ -238,10 +241,9 @@
 									planetId: overLappedPlanet.id,
 									flag2: overLappedPlanet.flag2
 								})
-								this.showMssg(planet, "You just gained a planet");
 							}
+							this.showMssg(planet, "You've just set a flag on a planet");
 							this.current_user.amount -= 400;
-							this.current_user.sat += overLappedPlanet.sat;
 						} else {
 							this.showMssg(money, "You don't have enough money");
 						}
@@ -337,7 +339,7 @@
 		}
 
 		getMousePos(evt) {
-			var rect = this.canvas.getBoundingClientRect();
+			const rect = this.canvas.getBoundingClientRect();
 			return {
 				x: evt.clientX - rect.left + this.xOffset,
 				y: evt.clientY - rect.top + this.yOffset
@@ -345,9 +347,9 @@
 		}
 
 		drawObjects(objects) {
-			for (let object of objects) {
-				this.ctx.drawImage(object.object, object.x - this.xOffset, object.y - this.yOffset, object.size, object.size);
-			}
+			// for (let object of objects) {
+			// 	this.ctx.drawImage(object.object, object.x - this.xOffset, object.y - this.yOffset, object.size, object.size);
+			// }
 		}
 
 		drawFlags() {
@@ -394,7 +396,7 @@
 		}
 
 		drawOneElementClip(object) {
-			var distance = object.range;
+			let distance = object.range;
 			if (distance == null)
 				distance = 150;
 			this.ctx.moveTo(object.x - this.xOffset, object.y - this.yOffset);
@@ -411,7 +413,7 @@
 			this.ctx.lineWidth = "2";
 			this.ctx.strokeStyle = "red";
 			for (let satellite of player.satellites) {
-				var from = satellite.predessesor;
+				const from = satellite.predessesor;
 				this.ctx.beginPath();
 				this.ctx.moveTo(from[0] + from[2] / 2 - this.xOffset, from[1] + from[2] / 2 - this.yOffset);
 				this.ctx.lineTo(satellite.x + satellite.size / 2 - this.xOffset, satellite.y + satellite.size / 2 - this.yOffset);
@@ -426,9 +428,9 @@
 		}
 
 		runGame() {
-			requestAnimationFrame(this.runGame.bind(this))
 			this.drawGalaxy()
 			this.updateHud()
+			requestAnimationFrame(this.runGame.bind(this))
 		}
 
 		updateHud() {
@@ -453,8 +455,8 @@
 		}
 
 		showPlanetDetails(e) {
-			var mousePos = this.getMousePos(e);
-			var planetArray = this.Map.planets;
+			const mousePos = this.getMousePos(e);
+			const planetArray = this.Map.planets;
 			let hoveredPlanet = null
 			let overlapPlanets = this.planets.some(function (planet) {
 				let isPlanetOverlapped = this.overlap({x: mousePos.x, y: mousePos.y, size: 1}, planet);
@@ -493,8 +495,8 @@
 		}//end of scoreCounter
 
 		isNearRightEdgeOfScreen(e) {
-			var mousePosX = this.getMousePos(e).x - this.xOffset;
-			var endOfScreenX = window.innerWidth;
+			const mousePosX = this.getMousePos(e).x - this.xOffset;
+			const endOfScreenX = window.innerWidth;
 			let distance = endOfScreenX - mousePosX;
 
 			if (distance < 175) {
