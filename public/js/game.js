@@ -1,7 +1,7 @@
 (function () {
 	"use strict"
-	const socket = io("http://localhost:5000");
-	// const socket = io("https://galaxy-control.herokuapp.com");
+	// const socket = io("http://localhost:5000");
+	const socket = io("https://galaxy-control.herokuapp.com");
 	let userIndex = null
 	socket.on('game start', function (objects) {
 		$('#intro').css("display", "none");
