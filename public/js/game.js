@@ -225,6 +225,7 @@
 				this.showMssg(!satClose, "Your satellite is out of range");
 			}
 			this.checkWinner();
+			this.scoreCounter();
 		}
 		checkWinner(){
 			let counter = [0,0];
@@ -243,7 +244,7 @@
 		getownerIndex(planet){
 			if(planet.flag1 > planet.flag2)
 				return 0;
-			if(planet.flag2 > planet.flag2)
+			if(planet.flag1 < planet.flag2)
 				return 1;
 			return -1;
 		}
