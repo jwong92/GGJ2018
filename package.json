@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js ",
-    "dev": "start http://localhost:3000/public/ | browser-sync start --no-open --server --files './css/**/*.css, ./js/**/*.js'",
-    "sv": "start http://localhost:3000/public/ | browser-sync start --no-open --server --files './css/**/*.css, ./js/**/*.js' --plugins C:\\Users\\Home\\AppData\\Roaming\\npm\\node_modules\\bs-html-injector?files[]=*.html  | nodemon index.js"
+    "dev": "start http://localhost:3000/public/ | browser-sync start --no-open --server --files './css/**/*.css, ./js/**/*.js, ./**/*.html'",
+    "sv": "start http://localhost:3000/public/ | browser-sync start --no-open --server --files './css/**/*.css, ./js/**/*.js, ./**/*.html' --plugins C:\\Users\\Home\\AppData\\Roaming\\npm\\node_modules\\bs-html-injector?files[]=*.html  | nodemon index.js"
   },
   "repository": {
     "type": "git",

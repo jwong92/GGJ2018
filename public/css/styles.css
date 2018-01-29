@@ -25,6 +25,7 @@ body {
   width:70%;
   padding: 0.5rem;
   text-align: left;
+  color: #9d98c1;
 }
 
 /* Andrei: add flex */
@@ -52,6 +53,14 @@ body {
   border: 0.1em solid rgb(68, 34, 75);
   color: rgb(219, 219, 212);
   margin: 0 0.75em;
+  cursor: pointer;
+  min-width: 90px;
+}
+.btn img{
+  margin-right: 0.3rem;
+}
+.btn:focus{
+  outline: none;
 }
 
 .btn:hover {
@@ -97,18 +106,15 @@ body {
   font-size:1.5rem;
 }
 #hud h2 {
-  /*margin-top: 2rem;*/
   margin:0;
   text-align: right;
-  /* color: #ff9f4f; */
   padding-left: 0.5rem;
   font-size: 1em;
 }
 
 #hud img {
-  height: 2rem;
+  height: 1rem;
   width: auto;
-  margin: 0 auto;
 }
 
 .inv {
@@ -133,9 +139,6 @@ body {
 
 .sat span::before, .flag span::before {
   content: " : ";
-}
-.sat span{
-  vertical-align: super;
 }
 
 .money, .kid span {
@@ -245,7 +248,16 @@ h1 {
   transition: all 0s linear;
   animation: rotate 2000ms infinite linear;
 }
-
+footer{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+footer a{
+  text-decoration: none;
+  color: rgba(183, 116, 74, 0.68);
+  padding-right: 1rem;
+}
 
 canvas{
     background: linear-gradient(45deg, #000000 ,#202D3F, #392C57, #36688B, #202D3F, #000000);
@@ -261,7 +273,7 @@ body{
 }
 
 img {
-  width: 1em;
+  width: 1rem;
 }
 /* Position of stars */
 [class^="planets"] {
@@ -292,7 +304,31 @@ img {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
+.hud{
+  display: flex;
+  z-index:1111;
+}
+.hud__group{
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+.hud__heading{
+  color: #d6d2cf;
+}
+.place-items__group .btn{
+  height: 2rem;
+  /*display: flex;*/
+  align-items: center;
+  margin: 0 0 0 1rem;
+}
+.place-items__group>span::before{
+  content: '/$';
+}
+.resources__group .inv.kid{
+  font-size: 1.2rem;
+  padding-top: 5px;
+}
 @keyframes rotate {
     0% {
       transform: rotateZ(0deg);

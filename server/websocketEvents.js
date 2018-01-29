@@ -2,6 +2,7 @@ const mapGenerator = require("./randomMapGenerator")
 
 function socketEvents(io) {
 	const rooms = []
+	let lastRoomId=0
 	io.on('connection', async function (socket) {
 		socket.on('get_room', function (callback) {
 			"use strict"
@@ -18,25 +19,34 @@ function socketEvents(io) {
 					let index = room.participants.push(socket)-1
 					socket.join(room.id);
 					socket.roomId = room.id
-					callback(room.objects,index)
+					callback(index)
 				}
 
 			}
 
 			if (!connected) {
-				const objects = mapGenerator(2000, 2000, 2, 25, 20)
-				let newRoom = {id: rooms.length, participants: [socket], objects}
+				const objects = mapGenerator(2000, 2000, 2, 25, 13)
+				let newRoom = {id: ++lastRoomId, participants: [socket], objects}
 				socket.roomId = newRoom.id
 				rooms.push(newRoom)
 				connected = true
 				socket.join(newRoom.id);
 				//generate map
-				callback(objects,0)
+				callback(0)
 			}
 			console.log(rooms)
 		})
+		socket.on('game ready', () => {
+			let room = rooms.find((room)=>room.id===socket.roomId)
+			io.sockets.in(socket.roomId).emit('game start', room.objects);
+		})
 		socket.on('satelites_changed', (satellites,userindex) => {
 			socket.broadcast.to(socket.roomId).emit('updateSatellites', userindex,satellites);
+		})
+		socket.on('game results', (dominance) => {
+			let room = rooms.find((room)=>room.id===socket.roomId)
+			room.dominance=dominance
+			socket.broadcast.to(socket.roomId).emit('resend game results', dominance);
 		})
 		socket.on('planet_flags_changed', (planet) => {
 			socket.broadcast.to(socket.roomId).emit('planet_flags_update', planet);
@@ -45,17 +55,12 @@ function socketEvents(io) {
 			socket.broadcast.to(socket.roomId).emit('resend_info', message);
 		})
 		socket.on('disconnect', () => {
-			let closingRoom = rooms[socket.roomId]
-			let loserIndex = null
+			let closingRoom = rooms.find((room)=>room.id===socket.roomId)
 			if (!closingRoom) return
-			closingRoom.participants.find((s, i) => {
-				if(s.id === socket.id){
-					loserIndex = i
-				}
-				return s.id === socket.id
-			})
 			let roomIndex = rooms.indexOf(closingRoom)
-			socket.broadcast.to(closingRoom.id).emit('end game', `You won since your opponent has left`);
+			if(!closingRoom.dominance){
+				socket.broadcast.to(closingRoom.id).emit('end game', `You won since your opponent has left`);
+			}
 			rooms.splice(roomIndex,1)
 		})
 	});

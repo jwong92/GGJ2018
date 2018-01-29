@@ -16,8 +16,44 @@
     <div id="mssgBox">
       <p id="message">Text</p>
     </div>
-
-    <div class="hidden mother" id="hud">
+    <header class="hud" id="hud">
+        <div class="place-items hud__group">
+            <h2 class="hud__heading">Place items</h2>
+            <div class="place-items__group">
+                <button id="btn_sat" class="kid btn">
+                    <img class="sat" src="img/stars/satellite-red.svg"/>
+                    <span>Satellite</span>
+                </button>
+                <span id="satellite_price">100</span>
+            </div>
+            <div class="place-items__group">
+                <button id="btn_flag" class="kid btn">
+                    <img class="flag" src="img/flags/flag-red.svg"/>
+                   <span> Flag</span>
+                </button>
+                <span id="flag_price">400</span>
+            </div>
+        </div>
+        <div class="resources hud__group">
+            <h2 class="hud__heading">Resources</h2>
+            <div class="resources__group">
+                <div class="inv money kid-large"><span id="money_rate">40</span>/10sec.</div>
+            </div>
+            <div class="resources__group">
+                <div class="inv money kid"><span id="money">4000</span></div>
+            </div>
+            <div class="resources__group">
+                <div class="inv sat kid"><img class="sat" src="img/stars/satellite-red.svg"/><span>5</span></div>
+            </div>
+        </div>
+        <div class="results hud__group">
+            <h2 class="hud__heading">Planets Claimed</h2>
+            <div class="resources__group">
+                <div class="score kid"><span id="user_score">400</span> &#47; <span id="planet_total">400</span></div>
+            </div>
+        </div>
+    </header>
+   <!-- <div class="hidden mother" id="hud">
 
         <h2 class="kid">Costs</h2>
         <div class="costs sat kid"><img class="sat" src="img/stars/satellite-red.svg"/><span>100</span></div>
@@ -34,7 +70,7 @@
 
         <h2 class="kid">Planets Claimed</h2>
         <div class="score kid"><span id="user_score">400</span> &#47; <span id="planet_total">400</span></div>
-    </div>
+    </div>-->
     <div id="planet_specs">
         <h2>Planet Details</h2>
         <div><h3>Rewards:</h3><span id="sat_bonus"></span> Satellites</div>
@@ -76,7 +112,8 @@
         <div id="planets"></div>
     </section>
 </div>
-<footer><a href="http://www.freepik.com">Some images Designed by Freepik</a><a href="public\img\GGJ00_GameCredits_SplashScreen.jpg">Game Jam Credits</a></footer>
+<footer><a href="http://www.freepik.com">Some images designed by Freepik</a><a
+        href="img\GGJ00_GameCredits_SplashScreen.jpg">Game Jam Credits</a></footer>
 <script src="js/socket.io.slim.js"></script>
 <script src="js/game.js"></script>
 <!--Add your scripts below if needed-->
