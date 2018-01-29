@@ -347,9 +347,9 @@
 		}
 
 		drawObjects(objects) {
-			// for (let object of objects) {
-			// 	this.ctx.drawImage(object.object, object.x - this.xOffset, object.y - this.yOffset, object.size, object.size);
-			// }
+			for (let object of objects) {
+				this.ctx.drawImage(object.object, object.x - this.xOffset, object.y - this.yOffset, object.size, object.size);
+			}
 		}
 
 		drawFlags() {
