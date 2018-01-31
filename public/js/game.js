@@ -9,7 +9,7 @@
 		new Game(objects, userIndex)
 	})
 	document.getElementById('start').addEventListener('click', function (ev) {
-		if(userIndex)return
+		if(userIndex!==null)return
 		socket.emit('get_room', function (index) {
 			userIndex = index
 			if (index === 1) {
