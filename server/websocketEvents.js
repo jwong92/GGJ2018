@@ -16,6 +16,7 @@ function socketEvents(io) {
 				}
 				if (room.participants.length === 1 && !connected) {
 					connected = true
+					if(room.participants[0]===socket)return
 					let index = room.participants.push(socket)-1
 					socket.join(room.id);
 					socket.roomId = room.id
